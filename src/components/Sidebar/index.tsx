@@ -15,6 +15,16 @@ import {
   FlexProps,
   Button,
   Heading,
+  useColorMode,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Input,
+  useToast,
 } from '@chakra-ui/react'
 import {
   FiHome,
@@ -26,6 +36,7 @@ import {
   FiLogOut,
   FiGithub,
   FiAlertCircle,
+  FiCloud,
 } from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import NextLink from 'next/link'
@@ -33,6 +44,12 @@ import { useRouter } from 'next/router'
 import { selectSubsNewBlock, selectSubsTxEvent } from '@/store/streamSlice'
 import { useSelector } from 'react-redux'
 import { LS_RPC_ADDRESS, LS_RPC_ADDRESS_LIST } from '@/utils/constant'
+import { FiSearch } from 'react-icons/fi'
+import { MoonIcon, SunIcon } from '@chakra-ui/icons'
+
+const heightRegex = /^\d+$/
+const txhashRegex = /^[A-Z\d]{64}$/
+const addrRegex = /^[a-z\d]+1[a-z\d]{38,58}$/
 
 interface LinkItemProps {
   name: string
@@ -49,21 +66,69 @@ const LinkItems: Array<LinkItemProps> = [
 ]
 const RefLinkItems: Array<LinkItemProps> = [
   {
+    name: 'Official Website',
+    icon: FiCloud,
+    route: 'https://paxinet.io',
+    isBlank: true,
+  },
+  {
     name: 'Github',
     icon: FiGithub,
-    route: 'https://github.com/arifintahu/dexplorer',
+    route: 'https://github.com/paxi-web3/dexplorer',
     isBlank: true,
   },
   {
     name: 'Report Issues',
     icon: FiAlertCircle,
-    route: 'https://github.com/arifintahu/dexplorer/issues',
+    route: 'https://github.com/paxi-web3/dexplorer/issues',
     isBlank: true,
   },
 ]
 
 export default function Sidebar({ children }: { children: ReactNode }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isOpen: isSearchOpen,
+    onOpen: onOpenSearch,
+    onClose: onCloseSearch,
+  } = useDisclosure()
+
+  const toast = useToast()
+  const router = useRouter()
+  const [inputSearch, setInputSearch] = useState('')
+
+  const handleInputSearch = (event: any) => {
+    setInputSearch(event.target.value as string)
+  }
+
+  const handleSearch = () => {
+    if (!inputSearch) {
+      toast({
+        title: 'Please enter a value!',
+        status: 'warning',
+        isClosable: true,
+      })
+      return
+    }
+
+    if (heightRegex.test(inputSearch)) {
+      router.push('/blocks/' + inputSearch)
+    } else if (txhashRegex.test(inputSearch)) {
+      router.push('/txs/' + inputSearch)
+    } else if (addrRegex.test(inputSearch)) {
+      router.push('/accounts/' + inputSearch)
+    } else {
+      toast({
+        title: 'Invalid Height, Transaction or Account Address!',
+        status: 'error',
+        isClosable: true,
+      })
+      return
+    }
+    setTimeout(() => {
+      onCloseSearch()
+    }, 500)
+  }
 
   return (
     <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
@@ -84,8 +149,45 @@ export default function Sidebar({ children }: { children: ReactNode }) {
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
+
+      <Modal isOpen={isSearchOpen} onClose={onCloseSearch}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Search</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Input
+              width={400}
+              type={'text'}
+              borderColor={useColorModeValue('light-theme', 'dark-theme')}
+              placeholder="Height/Transaction/Account Address"
+              onChange={handleInputSearch}
+            />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              bg={useColorModeValue('light-theme', 'dark-theme')}
+              _hover={{
+                opacity: 0.8,
+              }}
+              color="white"
+              w="full"
+              textTransform="uppercase"
+              onClick={handleSearch}
+            >
+              Confirm
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       {/* mobilenav */}
-      <MobileNav display={{ base: 'flex', md: 'none' }} onOpen={onOpen} />
+      <MobileNav
+        display={{ base: 'flex', md: 'none' }}
+        onOpen={onOpen}
+        onOpenSearch={onOpenSearch}
+      />
       <Box ml={{ base: 0, md: 60 }} p="4">
         {children}
       </Box>
@@ -127,8 +229,8 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             mx="8"
             justifyContent="space-between"
           >
-            <Text fontSize="2xl" fontFamily="monospace" fontWeight="bold">
-              Dexplorer
+            <Text fontSize="20px" fontWeight="bold">
+              Paxi Explorer
             </Text>
             <CloseButton
               display={{ base: 'flex', md: 'none' }}
@@ -243,8 +345,11 @@ const NavItem = ({ icon, children, route, isBlank, ...rest }: NavItemProps) => {
 
 interface MobileProps extends FlexProps {
   onOpen: () => void
+  onOpenSearch: () => void
 }
-const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
+const MobileNav = ({ onOpen, onOpenSearch, ...rest }: MobileProps) => {
+  const { colorMode, toggleColorMode } = useColorMode()
+
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
@@ -254,19 +359,41 @@ const MobileNav = ({ onOpen, ...rest }: MobileProps) => {
       bg={useColorModeValue('light-container', 'dark-container')}
       borderBottomWidth="1px"
       borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
-      justifyContent="flex-start"
+      justifyContent="space-between"
       {...rest}
     >
-      <IconButton
-        variant="outline"
-        onClick={onOpen}
-        aria-label="open menu"
-        icon={<FiMenu />}
-      />
+      <Flex align="center">
+        <IconButton
+          variant="ghost"
+          onClick={onOpen}
+          aria-label="open menu"
+          icon={<FiMenu />}
+        />
 
-      <Text fontSize="2xl" ml="8" fontFamily="monospace" fontWeight="bold">
-        Dexplorer
-      </Text>
+        <Text fontSize="2xl" ml="8" fontWeight="bold">
+          Paxi Explorer
+        </Text>
+      </Flex>
+
+      <Flex align="center" gap={2}>
+        <IconButton
+          variant="ghost"
+          aria-label="Search"
+          size="md"
+          fontSize="20"
+          icon={<FiSearch />}
+          onClick={onOpenSearch}
+        />
+
+        <IconButton
+          variant="ghost"
+          aria-label="Toggle Theme"
+          size="md"
+          fontSize="20"
+          icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
+          onClick={toggleColorMode}
+        />
+      </Flex>
     </Flex>
   )
 }

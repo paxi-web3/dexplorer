@@ -25,6 +25,18 @@ import {
   QueryParamsRequest as QuerySlashingParamsRequest,
   QueryParamsResponse as QuerySlashingParamsResponse,
 } from 'cosmjs-types/cosmos/slashing/v1beta1/query'
+import {
+  QueryParamsRequest as QueryCustomMintParamsRequest,
+  QueryParamsResponse as QueryCustomMintParamsResponse,
+} from '@/ts_proto/x/custommint/types/query'
+import {
+  QueryCirculatingSupplyRequest,
+  QueryCirculatingSupplyResponse,
+  QueryTotalSupplyRequest,
+  QueryTotalSupplyResponse,
+  QueryLockedVestingRequest,
+  QueryLockedVestingResponse,
+} from '@/ts_proto/x/paxi/types/query'
 
 export async function queryActiveValidators(
   tmClient: Tendermint37Client,
@@ -93,6 +105,18 @@ export async function queryMintParams(
   return QueryMintParamsResponse.decode(value)
 }
 
+export async function queryCustomMintParams(
+  tmClient: Tendermint37Client
+): Promise<QueryCustomMintParamsResponse> {
+  const queryClient = new QueryClient(tmClient)
+  const req = QueryCustomMintParamsRequest.encode({}).finish()
+  const { value } = await queryClient.queryAbci(
+    '/x.custommint.types.Query/Params',
+    req
+  )
+  return QueryCustomMintParamsResponse.decode(value)
+}
+
 export async function queryGovParams(
   tmClient: Tendermint37Client,
   paramsType: string
@@ -130,4 +154,40 @@ export async function querySlashingParams(
     req
   )
   return QuerySlashingParamsResponse.decode(value)
+}
+
+export async function getCirculatingSupply(
+  tmClient: Tendermint37Client
+): Promise<QueryCirculatingSupplyResponse> {
+  const queryClient = new QueryClient(tmClient)
+  const req = QueryCirculatingSupplyRequest.encode({}).finish()
+  const { value } = await queryClient.queryAbci(
+    '/x.paxi.types.Query/CirculatingSupply',
+    req
+  )
+  return QueryCirculatingSupplyResponse.decode(value)
+}
+
+export async function getTotalSupply(
+  tmClient: Tendermint37Client
+): Promise<QueryTotalSupplyResponse> {
+  const queryClient = new QueryClient(tmClient)
+  const req = QueryTotalSupplyRequest.encode({}).finish()
+  const { value } = await queryClient.queryAbci(
+    '/x.paxi.types.Query/TotalSupply',
+    req
+  )
+  return QueryTotalSupplyResponse.decode(value)
+}
+
+export async function getLockedVesting(
+  tmClient: Tendermint37Client
+): Promise<QueryLockedVestingResponse> {
+  const queryClient = new QueryClient(tmClient)
+  const req = QueryLockedVestingRequest.encode({}).finish()
+  const { value } = await queryClient.queryAbci(
+    '/x.paxi.types.Query/LockedVesting',
+    req
+  )
+  return QueryLockedVestingResponse.decode(value)
 }

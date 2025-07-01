@@ -107,8 +107,8 @@ export default function Validators() {
   return (
     <>
       <Head>
-        <title>Blocks | Dexplorer</title>
-        <meta name="description" content="Blocks | Dexplorer" />
+        <title>Blocks | Paxi Explorer</title>
+        <meta name="description" content="Blocks | Paxi Explorer" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

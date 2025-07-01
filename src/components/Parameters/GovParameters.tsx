@@ -25,6 +25,7 @@ import {
   displayDurationSeconds,
   convertRateToPercent,
   displayCoin,
+  toDisplayPercent,
 } from '@/utils/helper'
 import { fromUtf8 } from '@cosmjs/encoding'
 import { GOV_PARAMS_TYPE } from '@/utils/constant'
@@ -141,7 +142,7 @@ export default function GovParameters() {
               Quorum
             </Heading>
             <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {convertRateToPercent(tallyParams?.quorum)}
+              {toDisplayPercent(tallyParams?.quorum)}
             </Text>
           </Box>
         </Skeleton>
@@ -151,7 +152,7 @@ export default function GovParameters() {
               Threshold
             </Heading>
             <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {convertRateToPercent(tallyParams?.threshold)}
+              {toDisplayPercent(tallyParams?.threshold)}
             </Text>
           </Box>
         </Skeleton>
@@ -161,7 +162,7 @@ export default function GovParameters() {
               Veto Threshold
             </Heading>
             <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {convertRateToPercent(tallyParams?.vetoThreshold)}
+              {toDisplayPercent(tallyParams?.vetoThreshold)}
             </Text>
           </Box>
         </Skeleton>

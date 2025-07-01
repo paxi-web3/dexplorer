@@ -20,6 +20,8 @@ import {
   FiClock,
   FiCpu,
   FiUsers,
+  FiLock,
+  FiDollarSign,
 } from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import NextLink from 'next/link'
@@ -30,6 +32,16 @@ import { selectTmClient } from '@/store/connectSlice'
 import { selectNewBlock } from '@/store/streamSlice'
 import { displayDate } from '@/utils/helper'
 import { StatusResponse } from '@cosmjs/tendermint-rpc'
+import {
+  getCirculatingSupply,
+  getTotalSupply,
+  getLockedVesting,
+} from '@/rpc/abci'
+import {
+  QueryCirculatingSupplyResponse,
+  QueryTotalSupplyResponse,
+  QueryLockedVestingResponse,
+} from '@/ts_proto/x/paxi/types/query'
 
 export default function Home() {
   const tmClient = useSelector(selectTmClient)
@@ -37,11 +49,26 @@ export default function Home() {
   const [validators, setValidators] = useState<number>()
   const [isLoaded, setIsLoaded] = useState(false)
   const [status, setStatus] = useState<StatusResponse | null>()
+  const [circulatingSupply, setCirculatingSupply] =
+    useState<QueryCirculatingSupplyResponse>()
+  const [lockedVesting, setLockedVesting] =
+    useState<QueryLockedVestingResponse>()
 
   useEffect(() => {
     if (tmClient) {
       tmClient.status().then((response) => setStatus(response))
       getValidators(tmClient).then((response) => setValidators(response.total))
+      getCirculatingSupply(tmClient)
+        .then((response) => setCirculatingSupply(response))
+        .catch((error) =>
+          console.error('Error fetching circulating supply:', error)
+        )
+      getTotalSupply(tmClient)
+      getLockedVesting(tmClient)
+        .then((response) => setLockedVesting(response))
+        .catch((error) =>
+          console.error('Error fetching locked vesting:', error)
+        )
     }
   }, [tmClient])
 
@@ -54,8 +81,8 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Home | Dexplorer</title>
-        <meta name="description" content="Home | Dexplorer" />
+        <title>Home | Paxi Explorer</title>
+        <meta name="description" content="Home | Paxi Explorer" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -134,6 +161,38 @@ export default function Home() {
                 icon={FiUsers}
                 name="Validators"
                 value={validators}
+              />
+            </Skeleton>
+
+            <Skeleton isLoaded={isLoaded}>
+              <BoxInfo
+                bgColor="blue.100"
+                color="blue.600"
+                icon={FiDollarSign}
+                name="Circulating Supply"
+                value={
+                  circulatingSupply?.amount
+                    ? Math.ceil(
+                        parseFloat(circulatingSupply?.amount.amount) / 1000000
+                      ).toLocaleString() + ' PAXI'
+                    : 'N/A'
+                }
+              />
+            </Skeleton>
+
+            <Skeleton isLoaded={isLoaded}>
+              <BoxInfo
+                bgColor="pink.100"
+                color="pink.600"
+                icon={FiLock}
+                name="Locked Vesting"
+                value={
+                  lockedVesting?.amount
+                    ? Math.ceil(
+                        parseFloat(lockedVesting?.amount.amount) / 1000000
+                      ).toLocaleString() + ' PAXI'
+                    : 'N/A'
+                }
               />
             </Skeleton>
           </SimpleGrid>

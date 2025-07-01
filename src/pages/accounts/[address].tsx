@@ -38,7 +38,7 @@ import { selectTmClient } from '@/store/connectSlice'
 import { Account, Coin } from '@cosmjs/stargate'
 import { TxSearchResponse } from '@cosmjs/tendermint-rpc'
 import { toHex } from '@cosmjs/encoding'
-import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { trimHash, getTypeMsg } from '@/utils/helper'
 
 export default function DetailAccount() {
@@ -87,8 +87,10 @@ export default function DetailAccount() {
   useEffect(() => {
     if (txSearch?.txs.length && !txs.length) {
       for (const rawTx of txSearch.txs) {
-        if (rawTx.result.data) {
-          const data = TxBody.decode(rawTx.result.data)
+        const txRaw = TxRaw.decode(rawTx.tx)
+
+        if (txRaw.bodyBytes) {
+          const data = TxBody.decode(txRaw.bodyBytes)
           setTxs((prevTxs) => [
             ...prevTxs,
             {
@@ -145,8 +147,8 @@ export default function DetailAccount() {
   return (
     <>
       <Head>
-        <title>Detail Account | Dexplorer</title>
-        <meta name="description" content="Account | Dexplorer" />
+        <title>Detail Account | Paxi Explorer</title>
+        <meta name="description" content="Account | Paxi Explorer" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -260,8 +262,12 @@ export default function DetailAccount() {
                     <Tbody>
                       {allBalances.map((item, index) => (
                         <Tr key={index}>
-                          <Td>{item.denom}</Td>
-                          <Td>{item.amount}</Td>
+                          <Td>PAXI</Td>
+                          <Td>
+                            {(
+                              parseFloat(item.amount) / 1000000
+                            ).toLocaleString()}
+                          </Td>
                         </Tr>
                       ))}
                     </Tbody>
@@ -279,8 +285,14 @@ export default function DetailAccount() {
                     </Thead>
                     <Tbody>
                       <Tr>
-                        <Td>{balanceStaked?.denom}</Td>
-                        <Td>{balanceStaked?.amount}</Td>
+                        <Td>PAXI</Td>
+                        <Td>
+                          {balanceStaked?.amount
+                            ? (
+                                parseFloat(balanceStaked?.amount) / 1000000
+                              ).toLocaleString()
+                            : 0.0}
+                        </Td>
                       </Tr>
                     </Tbody>
                   </Table>

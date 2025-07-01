@@ -13,8 +13,12 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectTmClient } from '@/store/connectSlice'
 import { selectMintParams, setMintParams } from '@/store/paramsSlice'
-import { queryMintParams } from '@/rpc/abci'
-import { convertRateToPercent } from '@/utils/helper'
+import { queryCustomMintParams } from '@/rpc/abci'
+import {
+  convertRateToPercent,
+  toDisplayPercent,
+  displayCoin,
+} from '@/utils/helper'
 
 export default function MintParameters() {
   const [isHidden, setIsHidden] = useState(false)
@@ -25,10 +29,14 @@ export default function MintParameters() {
 
   useEffect(() => {
     if (tmClient && !params && !isLoaded) {
-      queryMintParams(tmClient)
+      queryCustomMintParams(tmClient)
         .then((response) => {
-          if (response.params) {
-            dispatch(setMintParams(response.params))
+          if (!response) {
+            setIsHidden(true)
+            return
+          }
+          if (response) {
+            dispatch(setMintParams(response))
           }
           setIsLoaded(true)
         })
@@ -74,57 +82,59 @@ export default function MintParameters() {
               Blocks per Year
             </Heading>
             <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {params?.blocksPerYear ? Number(params?.blocksPerYear) : ''}
+              {params?.blocksPerYear
+                ? Number(params?.blocksPerYear).toLocaleString()
+                : ''}
             </Text>
           </Box>
         </Skeleton>
         <Skeleton isLoaded={isLoaded}>
           <Box>
             <Heading size="xs" fontWeight={'normal'}>
-              Goal Bonded
+              First Year Inflation
             </Heading>
             <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {convertRateToPercent(params?.goalBonded)}
+              {toDisplayPercent(params?.firstYearInflation)}
             </Text>
           </Box>
         </Skeleton>
         <Skeleton isLoaded={isLoaded}>
           <Box>
             <Heading size="xs" fontWeight={'normal'}>
-              Inflation Max
+              Second Year Inflation
             </Heading>
             <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {convertRateToPercent(params?.inflationMax)}
+              {toDisplayPercent(params?.secondYearInflation)}
             </Text>
           </Box>
         </Skeleton>
         <Skeleton isLoaded={isLoaded}>
           <Box>
             <Heading size="xs" fontWeight={'normal'}>
-              Inflation Min
+              Other Year Inflation
             </Heading>
             <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {convertRateToPercent(params?.inflationMin)}
+              {toDisplayPercent(params?.otherYearInflation)}
             </Text>
           </Box>
         </Skeleton>
         <Skeleton isLoaded={isLoaded}>
           <Box>
             <Heading size="xs" fontWeight={'normal'}>
-              Inflation Rate Change
+              Burn Ratio
             </Heading>
             <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {convertRateToPercent(params?.inflationRateChange)}
+              {toDisplayPercent(params?.burnRatio)}
             </Text>
           </Box>
         </Skeleton>
         <Skeleton isLoaded={isLoaded}>
           <Box>
             <Heading size="xs" fontWeight={'normal'}>
-              Mint Denom
+              Burn Threshold
             </Heading>
             <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {params?.mintDenom ?? ''}
+              {parseFloat(params?.burnThreshold) ?? ''} PAXI
             </Text>
           </Box>
         </Skeleton>

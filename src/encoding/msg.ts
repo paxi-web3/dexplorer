@@ -3,6 +3,12 @@ import { MsgWithdrawDelegatorReward } from 'cosmjs-types/cosmos/distribution/v1b
 import { MsgDelegate } from 'cosmjs-types/cosmos/staking/v1beta1/tx'
 import { MsgUpdateClient } from 'cosmjs-types/ibc/core/client/v1/tx'
 import {
+  MsgExecuteContract,
+  MsgInstantiateContract,
+  MsgStoreCode,
+  MsgMigrateContract,
+} from 'cosmjs-types/cosmwasm/wasm/v1/tx'
+import {
   MsgAcknowledgement,
   MsgRecvPacket,
 } from 'cosmjs-types/ibc/core/channel/v1/tx'
@@ -12,6 +18,7 @@ import {
   MsgRevoke,
 } from 'cosmjs-types/cosmos/authz/v1beta1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
+import { fromUtf8 } from '@cosmjs/encoding'
 
 const TYPE = {
   MsgSend: '/cosmos.bank.v1beta1.MsgSend',
@@ -25,6 +32,10 @@ const TYPE = {
   MsgGrant: '/cosmos.authz.v1beta1.MsgGrant',
   MsgRevoke: '/cosmos.authz.v1beta1.MsgRevoke',
   MsgTransfer: '/ibc.applications.transfer.v1.MsgTransfer',
+  MsgMsgExecuteContract: '/cosmwasm.wasm.v1.MsgExecuteContract',
+  MsgMsgInstantiateContract: '/cosmwasm.wasm.v1.MsgInstantiateContract',
+  MsgMsgStoreCode: '/cosmwasm.wasm.v1.MsgStoreCode',
+  MsgMsgMigrateContract: '/cosmwasm.wasm.v1.MsgMigrateContract',
 }
 
 export interface DecodeMsg {
@@ -34,6 +45,7 @@ export interface DecodeMsg {
 
 export const decodeMsg = (typeUrl: string, value: Uint8Array): DecodeMsg => {
   let data = null
+  let decoded = null
   switch (typeUrl) {
     case TYPE.MsgSend:
       data = MsgSend.decode(value)
@@ -64,6 +76,45 @@ export const decodeMsg = (typeUrl: string, value: Uint8Array): DecodeMsg => {
       break
     case TYPE.MsgTransfer:
       data = MsgTransfer.decode(value)
+      break
+    case TYPE.MsgMsgExecuteContract:
+      decoded = MsgExecuteContract.decode(value)
+      data = MsgExecuteContract.toJSON(decoded) as any
+      if (decoded?.msg) {
+        try {
+          const readableMsg = [JSON.parse(fromUtf8(decoded.msg))]
+          data.msg = readableMsg
+        } catch (e) {
+          console.error('Failed to parse msg:', e)
+        }
+      }
+      break
+    case TYPE.MsgMsgInstantiateContract:
+      decoded = MsgInstantiateContract.decode(value)
+      data = MsgInstantiateContract.toJSON(decoded) as any
+      if (decoded?.msg) {
+        try {
+          const readableMsg = [JSON.parse(fromUtf8(decoded.msg))]
+          data.msg = readableMsg
+        } catch (e) {
+          console.error('Failed to parse msg:', e)
+        }
+      }
+      break
+    case TYPE.MsgMsgStoreCode:
+      data = MsgStoreCode.decode(value)
+      break
+    case TYPE.MsgMsgMigrateContract:
+      decoded = MsgMigrateContract.decode(value)
+      data = MsgMigrateContract.toJSON(decoded) as any
+      if (decoded?.msg) {
+        try {
+          const readableMsg = [JSON.parse(fromUtf8(decoded.msg))]
+          data.msg = readableMsg
+        } catch (e) {
+          console.error('Failed to parse msg:', e)
+        }
+      }
       break
     default:
       break

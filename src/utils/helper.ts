@@ -67,6 +67,19 @@ export const convertRateToPercent = (rate: string | undefined): string => {
   return `${commission}%`
 }
 
+export const toDisplayPercent = (rate: string | undefined): string => {
+  if (!rate || isNaN(Number(rate))) {
+    return `0.00%`
+  }
+
+  const percent = (parseFloat(rate) * 100).toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })
+
+  return `${percent}%`
+}
+
 export const displayCoin = (deposit: Coin) => {
   if (deposit.denom.startsWith('u')) {
     const amount = Math.round(Number(deposit.amount) / 10 ** 6)

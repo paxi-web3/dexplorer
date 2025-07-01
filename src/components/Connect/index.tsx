@@ -1,4 +1,4 @@
-import { FormEvent, ChangeEvent, useState } from 'react'
+import { FormEvent, ChangeEvent, useState, useEffect } from 'react'
 import {
   Stack,
   FormControl,
@@ -27,12 +27,16 @@ import { FiZap } from 'react-icons/fi'
 
 const chainList = [
   {
-    name: 'Cosmos Hub',
-    rpc: 'https://cosmoshub-rpc.lavenderfive.com',
+    name: 'Paxi Mainnet',
+    rpc: 'https://mainnet-rpc.paxinet.io',
   },
   {
-    name: 'Osmosis',
-    rpc: 'https://rpc-osmosis.ecostake.com',
+    name: 'Paxi Testnet',
+    rpc: 'https://testnet-rpc.paxinet.io',
+  },
+  {
+    name: 'Local Testnet',
+    rpc: 'http://127.0.0.1:26657',
   },
 ]
 
@@ -42,7 +46,29 @@ export default function Connect() {
     'initial'
   )
   const [error, setError] = useState(false)
+  const [connected, setConnected] = useState(false)
+
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    // Init the RPC address list from localStorage
+    const storedList = localStorage.getItem(LS_RPC_ADDRESS_LIST)
+    const storedRpcs = storedList ? JSON.parse(storedList) : []
+
+    const combined = [...storedRpcs, ...chainList.map((c) => c.rpc)]
+
+    // Remove duplicates and save back to localStorage
+    const deduplicated = Array.from(new Set(combined))
+    localStorage.setItem(LS_RPC_ADDRESS_LIST, JSON.stringify(deduplicated))
+
+    if (!connected) {
+      const saved = localStorage.getItem(LS_RPC_ADDRESS)
+      const defaultRpc = saved || 'https://mainnet-rpc.paxinet.io'
+      setAddress(defaultRpc)
+      connectClient(defaultRpc)
+      setConnected(true)
+    }
+  }, [connected])
 
   const submitForm = async (e: FormEvent) => {
     e.preventDefault()
@@ -82,9 +108,18 @@ export default function Connect() {
       setState('success')
 
       window.localStorage.setItem(LS_RPC_ADDRESS, rpcAddress)
+      // Remove duplicates and save back to localStorage
+      const deduplicated = Array.from(
+        new Set([
+          rpcAddress,
+          ...JSON.parse(
+            window.localStorage.getItem(LS_RPC_ADDRESS_LIST) || '[]'
+          ),
+        ])
+      )
       window.localStorage.setItem(
         LS_RPC_ADDRESS_LIST,
-        JSON.stringify([rpcAddress])
+        JSON.stringify(deduplicated)
       )
     } catch (err) {
       console.error(err)

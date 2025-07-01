@@ -53,18 +53,14 @@ export default function DetailBlock() {
   }, [tmClient, height])
 
   useEffect(() => {
-    if (block?.txs.length && !txs.length) {
-      for (const rawTx of block.txs) {
-        const data = TxData.decode(rawTx)
-        const hash = sha256(rawTx)
-        setTxs((prevTxs) => [
-          ...prevTxs,
-          {
-            data,
-            hash,
-          },
-        ])
-      }
+    if (block?.txs.length) {
+      const newTxs = block.txs.map((rawTx) => {
+        return {
+          data: TxData.decode(rawTx),
+          hash: sha256(rawTx),
+        }
+      })
+      setTxs(newTxs)
     }
   }, [block])
 
@@ -123,8 +119,8 @@ export default function DetailBlock() {
   return (
     <>
       <Head>
-        <title>Detail Block | Dexplorer</title>
-        <meta name="description" content="Block | Dexplorer" />
+        <title>Detail Block | Paxi Explorer</title>
+        <meta name="description" content="Block | Paxi Explorer" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

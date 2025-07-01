@@ -31,7 +31,7 @@ import NextLink from 'next/link'
 import { FiChevronRight, FiHome, FiCheck, FiX } from 'react-icons/fi'
 import { selectNewBlock, selectTxEvent } from '@/store/streamSlice'
 import { toHex } from '@cosmjs/encoding'
-import { TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { TxBody, TxRaw } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 import { timeFromNow, trimHash, getTypeMsg } from '@/utils/helper'
 
 const MAX_ROWS = 20
@@ -71,51 +71,42 @@ export default function Blocks() {
   }
 
   const updateTxs = (txEvent: TxEvent) => {
-    const tx = {
-      TxEvent: txEvent,
-      Timestamp: new Date(),
-    }
-    if (txs.length) {
-      if (
-        txEvent.height >= txs[0].TxEvent.height &&
-        txEvent.hash != txs[0].TxEvent.hash
-      ) {
-        setTxs((prevTx) => [tx, ...prevTx.slice(0, MAX_ROWS - 1)])
+    const hash = toHex(txEvent.hash)
+    setTxs((prevTxs) => {
+      if (prevTxs.find((tx) => toHex(tx.TxEvent.hash) === hash)) {
+        return prevTxs
       }
-    } else {
-      setTxs([tx])
-    }
+      return [
+        { TxEvent: txEvent, Timestamp: new Date() },
+        ...prevTxs.slice(0, MAX_ROWS - 1),
+      ]
+    })
   }
 
-  const renderMessages = (data: Uint8Array | undefined) => {
-    if (data) {
-      const txBody = TxBody.decode(data)
-      const messages = txBody.messages
-
-      if (messages.length == 1) {
-        return (
-          <HStack>
-            <Tag colorScheme="cyan">{getTypeMsg(messages[0].typeUrl)}</Tag>
-          </HStack>
-        )
-      } else if (messages.length > 1) {
-        return (
-          <HStack>
-            <Tag colorScheme="cyan">{getTypeMsg(messages[0].typeUrl)}</Tag>
-            <Text textColor="cyan.800">+{messages.length - 1}</Text>
-          </HStack>
-        )
-      }
+  const renderMessages = (messages: any) => {
+    if (!messages || !Array.isArray(messages)) {
+      return ''
+    } else if (messages.length == 1) {
+      return (
+        <HStack>
+          <Tag colorScheme="cyan">{getTypeMsg(messages[0].typeUrl)}</Tag>
+        </HStack>
+      )
+    } else if (messages.length > 1) {
+      return (
+        <HStack>
+          <Tag colorScheme="cyan">{getTypeMsg(messages[0].typeUrl)}</Tag>
+          <Text textColor="cyan.800">+{messages.length - 1}</Text>
+        </HStack>
+      )
     }
-
-    return ''
   }
 
   return (
     <>
       <Head>
-        <title>Blocks | Dexplorer</title>
-        <meta name="description" content="Blocks | Dexplorer" />
+        <title>Blocks | Paxi Explorer</title>
+        <meta name="description" content="Blocks | Paxi Explorer" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -242,7 +233,13 @@ export default function Blocks() {
                               </Tag>
                             )}
                           </Td>
-                          <Td>{renderMessages(tx.TxEvent.result.data)}</Td>
+                          <Td>
+                            {renderMessages(
+                              TxBody.decode(
+                                TxRaw.decode(tx.TxEvent.tx).bodyBytes
+                              ).messages
+                            )}
+                          </Td>
                           <Td>{tx.TxEvent.height}</Td>
                           <Td>{timeFromNow(tx.Timestamp.toISOString())}</Td>
                         </Tr>

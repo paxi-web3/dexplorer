@@ -74,26 +74,6 @@ export default function DistributionParameters() {
         <Skeleton isLoaded={isLoaded}>
           <Box>
             <Heading size="xs" fontWeight={'normal'}>
-              Base Proposer Reward
-            </Heading>
-            <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {convertRateToPercent(params?.baseProposerReward)}
-            </Text>
-          </Box>
-        </Skeleton>
-        <Skeleton isLoaded={isLoaded}>
-          <Box>
-            <Heading size="xs" fontWeight={'normal'}>
-              Bonus Proposer Reward
-            </Heading>
-            <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {convertRateToPercent(params?.bonusProposerReward)}
-            </Text>
-          </Box>
-        </Skeleton>
-        <Skeleton isLoaded={isLoaded}>
-          <Box>
-            <Heading size="xs" fontWeight={'normal'}>
               Community Tax
             </Heading>
             <Text pt="2" fontSize="lg" fontWeight={'medium'}>

@@ -254,6 +254,7 @@ export default function Navbar() {
             fontSize="20"
             icon={<FiSearch />}
             onClick={onOpen}
+            display={{ base: 'none', md: 'flex' }}
           />
           <IconButton
             variant="ghost"
@@ -262,6 +263,7 @@ export default function Navbar() {
             fontSize="20"
             icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
             onClick={toggleColorMode}
+            display={{ base: 'none', md: 'flex' }}
           />
         </HStack>
       </Box>

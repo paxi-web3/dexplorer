@@ -154,6 +154,7 @@ export default function Proposals() {
           shadow={'base'}
           borderRadius={4}
           p={4}
+          overflowX="auto"
         >
           <DataTable
             columns={columns}

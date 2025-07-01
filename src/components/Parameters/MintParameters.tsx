@@ -12,12 +12,10 @@ import {
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectTmClient } from '@/store/connectSlice'
-import { selectMintParams, setMintParams } from '@/store/paramsSlice'
+import { selectCustomMintParams, setCustomMintParams } from '@/store/paramsSlice'
 import { queryCustomMintParams } from '@/rpc/abci'
 import {
-  convertRateToPercent,
   toDisplayPercent,
-  displayCoin,
 } from '@/utils/helper'
 
 export default function MintParameters() {
@@ -25,7 +23,7 @@ export default function MintParameters() {
   const [isLoaded, setIsLoaded] = useState(false)
   const dispatch = useDispatch()
   const tmClient = useSelector(selectTmClient)
-  const params = useSelector(selectMintParams)
+  const params = useSelector(selectCustomMintParams)
 
   useEffect(() => {
     if (tmClient && !params && !isLoaded) {
@@ -36,7 +34,7 @@ export default function MintParameters() {
             return
           }
           if (response) {
-            dispatch(setMintParams(response))
+            dispatch(setCustomMintParams(response))
           }
           setIsLoaded(true)
         })
@@ -134,7 +132,7 @@ export default function MintParameters() {
               Burn Threshold
             </Heading>
             <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {parseFloat(params?.burnThreshold) ?? ''} PAXI
+              {params ? parseFloat(params?.burnThreshold) : ''} PAXI
             </Text>
           </Box>
         </Skeleton>

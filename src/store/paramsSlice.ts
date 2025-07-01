@@ -10,6 +10,8 @@ import {
   DepositParams,
   TallyParams,
 } from 'cosmjs-types/cosmos/gov/v1/gov'
+import { QueryParamsResponse as CustomMintParams } from '@/ts_proto/x/custommint/types/query'
+
 
 // Type for our state
 export interface ParamsState {
@@ -20,6 +22,7 @@ export interface ParamsState {
   govVotingParams: VotingParams | null
   govDepositParams: DepositParams | null
   govTallyParams: TallyParams | null
+  customMintParams: CustomMintParams | null
 }
 
 // Initial state
@@ -31,6 +34,7 @@ const initialState: ParamsState = {
   govVotingParams: null,
   govDepositParams: null,
   govTallyParams: null,
+  customMintParams: null,
 }
 
 // Actual Slice
@@ -59,6 +63,9 @@ export const paramsSlice = createSlice({
     setGovTallyParams(state, action) {
       state.govTallyParams = action.payload
     },
+    setCustomMintParams(state, action) {
+      state.customMintParams = action.payload
+    },
   },
 
   // Special reducer for hydrating the state. Special case for next-redux-wrapper
@@ -80,6 +87,7 @@ export const {
   setGovVotingParams,
   setGovDepositParams,
   setGovTallyParams,
+  setCustomMintParams,
 } = paramsSlice.actions
 
 export const selectStakingParams = (state: AppState) =>
@@ -95,5 +103,7 @@ export const selectGovDepositParams = (state: AppState) =>
   state.params.govDepositParams
 export const selectGovTallyParams = (state: AppState) =>
   state.params.govTallyParams
+export const selectCustomMintParams = (state: AppState) =>
+  state.params.customMintParams
 
 export default paramsSlice.reducer

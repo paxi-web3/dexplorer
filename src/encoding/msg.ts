@@ -19,6 +19,7 @@ import {
 } from 'cosmjs-types/cosmos/authz/v1beta1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import { fromUtf8 } from '@cosmjs/encoding'
+import { MsgProvideLiquidity, MsgSwap, MsgWithdrawLiquidity } from '@/ts_proto/x/swap/types/tx'
 
 const TYPE = {
   MsgSend: '/cosmos.bank.v1beta1.MsgSend',
@@ -32,10 +33,13 @@ const TYPE = {
   MsgGrant: '/cosmos.authz.v1beta1.MsgGrant',
   MsgRevoke: '/cosmos.authz.v1beta1.MsgRevoke',
   MsgTransfer: '/ibc.applications.transfer.v1.MsgTransfer',
-  MsgMsgExecuteContract: '/cosmwasm.wasm.v1.MsgExecuteContract',
-  MsgMsgInstantiateContract: '/cosmwasm.wasm.v1.MsgInstantiateContract',
-  MsgMsgStoreCode: '/cosmwasm.wasm.v1.MsgStoreCode',
-  MsgMsgMigrateContract: '/cosmwasm.wasm.v1.MsgMigrateContract',
+  MsgExecuteContract: '/cosmwasm.wasm.v1.MsgExecuteContract',
+  MsgInstantiateContract: '/cosmwasm.wasm.v1.MsgInstantiateContract',
+  MsgStoreCode: '/cosmwasm.wasm.v1.MsgStoreCode',
+  MsgMigrateContract: '/cosmwasm.wasm.v1.MsgMigrateContract',
+  MsgProvideLiquidity: '/x.swap.types.MsgProvideLiquidity',
+  MsgWithdrawLiquidity: '/x.swap.types.MsgWithdrawLiquidity',
+  MsgSwap: '/x.swap.types.MsgSwap',
 }
 
 export interface DecodeMsg {
@@ -77,7 +81,7 @@ export const decodeMsg = (typeUrl: string, value: Uint8Array): DecodeMsg => {
     case TYPE.MsgTransfer:
       data = MsgTransfer.decode(value)
       break
-    case TYPE.MsgMsgExecuteContract:
+    case TYPE.MsgExecuteContract:
       decoded = MsgExecuteContract.decode(value)
       data = MsgExecuteContract.toJSON(decoded) as any
       if (decoded?.msg) {
@@ -89,7 +93,7 @@ export const decodeMsg = (typeUrl: string, value: Uint8Array): DecodeMsg => {
         }
       }
       break
-    case TYPE.MsgMsgInstantiateContract:
+    case TYPE.MsgInstantiateContract:
       decoded = MsgInstantiateContract.decode(value)
       data = MsgInstantiateContract.toJSON(decoded) as any
       if (decoded?.msg) {
@@ -101,10 +105,10 @@ export const decodeMsg = (typeUrl: string, value: Uint8Array): DecodeMsg => {
         }
       }
       break
-    case TYPE.MsgMsgStoreCode:
+    case TYPE.MsgStoreCode:
       data = MsgStoreCode.decode(value)
       break
-    case TYPE.MsgMsgMigrateContract:
+    case TYPE.MsgMigrateContract:
       decoded = MsgMigrateContract.decode(value)
       data = MsgMigrateContract.toJSON(decoded) as any
       if (decoded?.msg) {
@@ -115,6 +119,15 @@ export const decodeMsg = (typeUrl: string, value: Uint8Array): DecodeMsg => {
           console.error('Failed to parse msg:', e)
         }
       }
+      break
+    case TYPE.MsgProvideLiquidity:
+      data = MsgProvideLiquidity.decode(value)
+      break
+    case TYPE.MsgWithdrawLiquidity:
+      data = MsgWithdrawLiquidity.decode(value)
+      break
+    case TYPE.MsgSwap:
+      data = MsgSwap.decode(value)
       break
     default:
       break

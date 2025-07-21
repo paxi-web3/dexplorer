@@ -132,7 +132,7 @@ export default function MintParameters() {
               Burn Threshold
             </Heading>
             <Text pt="2" fontSize="lg" fontWeight={'medium'}>
-              {params ? parseFloat(params?.burnThreshold) : ''} PAXI
+              {params ? parseFloat(params?.burnThreshold) : ''} upaxi
             </Text>
           </Box>
         </Skeleton>

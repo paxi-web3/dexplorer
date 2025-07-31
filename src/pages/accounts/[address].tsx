@@ -31,6 +31,7 @@ import { useSelector } from 'react-redux'
 import {
   getAccount,
   getAllBalances,
+  getAllSpendableBalances,
   getBalanceStaked,
   getTxsBySender,
 } from '@/rpc/query'
@@ -67,7 +68,7 @@ export default function DetailAccount() {
       }
 
       if (!allBalances.length) {
-        getAllBalances(tmClient, address as string)
+        getAllSpendableBalances(tmClient, address as string)
           .then(setAllBalances)
           .catch(showError)
       }

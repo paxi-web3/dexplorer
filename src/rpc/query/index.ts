@@ -4,12 +4,16 @@ import {
   Coin,
   IndexedTx,
   StargateClient,
+  createProtobufRpcClient,
+  QueryClient,
+  setupBankExtension
 } from '@cosmjs/stargate'
 import {
   Tendermint37Client,
   TxSearchResponse,
   ValidatorsResponse,
 } from '@cosmjs/tendermint-rpc'
+import { QueryClientImpl as BankQueryClientImpl } from "cosmjs-types/cosmos/bank/v1beta1/query";
 
 export async function getChainId(
   tmClient: Tendermint37Client
@@ -54,6 +58,20 @@ export async function getAllBalances(
 ): Promise<readonly Coin[]> {
   const client = await StargateClient.create(tmClient)
   return client.getAllBalances(address)
+}
+
+export async function getAllSpendableBalances(
+  tmClient: Tendermint37Client,
+  address: string
+): Promise<readonly Coin[]> { 
+  const queryClient = QueryClient.withExtensions(tmClient, setupBankExtension);
+
+  const rpc = createProtobufRpcClient(queryClient);
+
+  const bankService = new BankQueryClientImpl(rpc);
+  const response = await bankService.SpendableBalances({ address });
+
+  return response.balances;
 }
 
 export async function getBalanceStaked(

@@ -5,7 +5,6 @@ import {
   CloseButton,
   Flex,
   Icon,
-  useColorModeValue,
   Link,
   Drawer,
   DrawerContent,
@@ -15,7 +14,6 @@ import {
   FlexProps,
   Button,
   Heading,
-  useColorMode,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -37,6 +35,8 @@ import {
   FiGithub,
   FiAlertCircle,
   FiCloud,
+  FiUsers,
+  FiDollarSign,
 } from 'react-icons/fi'
 import { IconType } from 'react-icons'
 import NextLink from 'next/link'
@@ -45,11 +45,11 @@ import { selectSubsNewBlock, selectSubsTxEvent } from '@/store/streamSlice'
 import { useSelector } from 'react-redux'
 import { LS_RPC_ADDRESS, LS_RPC_ADDRESS_LIST } from '@/utils/constant'
 import { FiSearch } from 'react-icons/fi'
-import { MoonIcon, SunIcon } from '@chakra-ui/icons'
 
 const heightRegex = /^\d+$/
 const txhashRegex = /^[A-Z\d]{64}$/
 const addrRegex = /^[a-z\d]+1[a-z\d]{38,58}$/
+const prc20ContractRegex = /^paxi1[a-z\d]{59,}$/
 
 interface LinkItemProps {
   name: string
@@ -61,6 +61,8 @@ const LinkItems: Array<LinkItemProps> = [
   { name: 'Home', icon: FiHome, route: '/' },
   { name: 'Blocks', icon: FiBox, route: '/blocks' },
   { name: 'Validators', icon: FiCompass, route: '/validators' },
+  { name: 'Holders', icon: FiUsers, route: '/holders' },
+  { name: 'PRC-20', icon: FiDollarSign, route: '/prc20' },
   { name: 'Proposals', icon: FiStar, route: '/proposals' },
   { name: 'Parameters', icon: FiSliders, route: '/parameters' },
 ]
@@ -115,11 +117,13 @@ export default function Sidebar({ children }: { children: ReactNode }) {
       router.push('/blocks/' + inputSearch)
     } else if (txhashRegex.test(inputSearch)) {
       router.push('/txs/' + inputSearch)
+    } else if (prc20ContractRegex.test(inputSearch)) {
+      router.push('/prc20/' + inputSearch)
     } else if (addrRegex.test(inputSearch)) {
       router.push('/accounts/' + inputSearch)
     } else {
       toast({
-        title: 'Invalid Height, Transaction or Account Address!',
+        title: 'Invalid Height, Transaction, Account or PRC-20 Address!',
         status: 'error',
         isClosable: true,
       })
@@ -131,7 +135,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
   }
 
   return (
-    <Box minH="100vh" bg={useColorModeValue('gray.100', 'gray.900')}>
+    <Box minH="100vh" bg="#0b0f19" color="gray.200">
       <SidebarContent
         onClose={() => onClose}
         display={{ base: 'none', md: 'block' }}
@@ -152,24 +156,32 @@ export default function Sidebar({ children }: { children: ReactNode }) {
 
       <Modal isOpen={isSearchOpen} onClose={onCloseSearch}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent
+          bg="#0b0f19"
+          border="1px solid rgba(255, 255, 255, 0.08)"
+          color="white"
+        >
           <ModalHeader>Search</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Input
               width={400}
               type={'text'}
-              borderColor={useColorModeValue('light-theme', 'dark-theme')}
-              placeholder="Height/Transaction/Account Address"
+              borderColor="rgba(255, 255, 255, 0.08)"
+              _focus={{
+                borderColor: '#a855f7',
+                boxShadow: '0 0 0 1px #a855f7',
+              }}
+              placeholder="Height/Tx/Account/PRC-20"
               onChange={handleInputSearch}
             />
           </ModalBody>
 
           <ModalFooter>
             <Button
-              bg={useColorModeValue('light-theme', 'dark-theme')}
+              bg="#9333ea"
               _hover={{
-                opacity: 0.8,
+                bg: '#7e22ce',
               }}
               color="white"
               w="full"
@@ -213,9 +225,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
   return (
     <Box
-      bg={useColorModeValue('light-container', 'dark-container')}
+      bg="rgba(11, 15, 25, 0.95)"
       borderRight="1px"
-      borderRightColor={useColorModeValue('gray.200', 'gray.700')}
+      borderRightColor="rgba(255, 255, 255, 0.08)"
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"
@@ -248,7 +260,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             mx="4"
             size={'xs'}
             textTransform="uppercase"
-            textColor={useColorModeValue('gray.500', 'gray.100')}
+            textColor="gray.500"
             fontWeight="medium"
           >
             Links
@@ -312,16 +324,11 @@ const NavItem = ({ icon, children, route, isBlank, ...rest }: NavItemProps) => {
         borderRadius="lg"
         role="group"
         cursor="pointer"
-        bg={
-          isSelected
-            ? useColorModeValue('light-theme', 'dark-theme')
-            : 'transparent'
-        }
-        color={isSelected ? 'white' : useColorModeValue('black', 'white')}
+        bg={isSelected ? 'rgba(147, 51, 234, 0.1)' : 'transparent'}
+        color={isSelected ? '#a855f7' : '#94a3b8'}
         _hover={{
-          color: isSelected
-            ? 'white'
-            : useColorModeValue('light-theme', 'dark-theme'),
+          bg: 'rgba(255, 255, 255, 0.05)',
+          color: isSelected ? '#a855f7' : 'white',
         }}
         {...rest}
       >
@@ -330,9 +337,7 @@ const NavItem = ({ icon, children, route, isBlank, ...rest }: NavItemProps) => {
             mr="4"
             fontSize="16"
             _groupHover={{
-              color: isSelected
-                ? 'white'
-                : useColorModeValue('light-theme', 'dark-theme'),
+              color: isSelected ? '#a855f7' : 'white',
             }}
             as={icon}
           />
@@ -348,17 +353,15 @@ interface MobileProps extends FlexProps {
   onOpenSearch: () => void
 }
 const MobileNav = ({ onOpen, onOpenSearch, ...rest }: MobileProps) => {
-  const { colorMode, toggleColorMode } = useColorMode()
-
   return (
     <Flex
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 24 }}
       height="20"
       alignItems="center"
-      bg={useColorModeValue('light-container', 'dark-container')}
+      bg="rgba(11, 15, 25, 0.95)"
       borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue('gray.200', 'gray.700')}
+      borderBottomColor="rgba(255, 255, 255, 0.08)"
       justifyContent="space-between"
       {...rest}
     >
@@ -383,15 +386,6 @@ const MobileNav = ({ onOpen, onOpenSearch, ...rest }: MobileProps) => {
           fontSize="20"
           icon={<FiSearch />}
           onClick={onOpenSearch}
-        />
-
-        <IconButton
-          variant="ghost"
-          aria-label="Toggle Theme"
-          size="md"
-          fontSize="20"
-          icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-          onClick={toggleColorMode}
         />
       </Flex>
     </Flex>

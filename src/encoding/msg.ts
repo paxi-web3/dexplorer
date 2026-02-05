@@ -19,7 +19,11 @@ import {
 } from 'cosmjs-types/cosmos/authz/v1beta1/tx'
 import { MsgTransfer } from 'cosmjs-types/ibc/applications/transfer/v1/tx'
 import { fromUtf8 } from '@cosmjs/encoding'
-import { MsgProvideLiquidity, MsgSwap, MsgWithdrawLiquidity } from '@/ts_proto/x/swap/types/tx'
+import {
+  MsgProvideLiquidity,
+  MsgSwap,
+  MsgWithdrawLiquidity,
+} from '@/ts_proto/x/swap/types/tx'
 
 const TYPE = {
   MsgSend: '/cosmos.bank.v1beta1.MsgSend',

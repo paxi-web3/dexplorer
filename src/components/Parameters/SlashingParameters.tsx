@@ -7,7 +7,6 @@ import {
   Skeleton,
   Text,
   Tooltip,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -47,7 +46,7 @@ export default function SlashingParameters() {
   return (
     <Box
       mt={6}
-      bg={useColorModeValue('light-container', 'dark-container')}
+      bg={'dark-container'}
       shadow={'base'}
       borderRadius={4}
       p={6}
@@ -61,7 +60,7 @@ export default function SlashingParameters() {
           <InfoOutlineIcon
             boxSize={5}
             justifyItems={'center'}
-            color={useColorModeValue('light-theme', 'dark-theme')}
+            color={'dark-theme'}
           />
         </Tooltip>
         <Heading size={'md'} fontWeight={'medium'}>

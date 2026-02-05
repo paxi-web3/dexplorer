@@ -6,14 +6,15 @@ import {
   StargateClient,
   createProtobufRpcClient,
   QueryClient,
-  setupBankExtension
+  setupBankExtension,
 } from '@cosmjs/stargate'
+import { Metadata } from 'cosmjs-types/cosmos/bank/v1beta1/bank'
 import {
   Tendermint37Client,
   TxSearchResponse,
   ValidatorsResponse,
 } from '@cosmjs/tendermint-rpc'
-import { QueryClientImpl as BankQueryClientImpl } from "cosmjs-types/cosmos/bank/v1beta1/query";
+import { QueryClientImpl as BankQueryClientImpl } from 'cosmjs-types/cosmos/bank/v1beta1/query'
 
 export async function getChainId(
   tmClient: Tendermint37Client
@@ -63,15 +64,15 @@ export async function getAllBalances(
 export async function getAllSpendableBalances(
   tmClient: Tendermint37Client,
   address: string
-): Promise<readonly Coin[]> { 
-  const queryClient = QueryClient.withExtensions(tmClient, setupBankExtension);
+): Promise<readonly Coin[]> {
+  const queryClient = QueryClient.withExtensions(tmClient, setupBankExtension)
 
-  const rpc = createProtobufRpcClient(queryClient);
+  const rpc = createProtobufRpcClient(queryClient)
 
-  const bankService = new BankQueryClientImpl(rpc);
-  const response = await bankService.SpendableBalances({ address });
+  const bankService = new BankQueryClientImpl(rpc)
+  const response = await bankService.SpendableBalances({ address })
 
-  return response.balances;
+  return response.balances
 }
 
 export async function getBalanceStaked(
@@ -95,4 +96,20 @@ export async function getTxsBySender(
     page: page,
     per_page: perPage,
   })
+}
+
+export async function getDenomMetadata(
+  tmClient: Tendermint37Client,
+  denom: string
+): Promise<Metadata | null> {
+  const queryClient = QueryClient.withExtensions(tmClient, setupBankExtension)
+  const rpc = createProtobufRpcClient(queryClient)
+  const bankService = new BankQueryClientImpl(rpc)
+
+  try {
+    const response = await bankService.DenomMetadata({ denom })
+    return response.metadata || null
+  } catch (error) {
+    return null
+  }
 }

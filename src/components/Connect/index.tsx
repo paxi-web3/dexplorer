@@ -4,7 +4,6 @@ import {
   FormControl,
   Input,
   Button,
-  useColorModeValue,
   Heading,
   Text,
   Container,
@@ -146,15 +145,17 @@ export default function Connect() {
         minH={'100vh'}
         align={'center'}
         justify={'center'}
-        bg={useColorModeValue('light-bg', 'dark-bg')}
+        bg="#0b0f19"
         flexDirection={'column'}
         gap={16}
       >
         <Container
           maxW={'lg'}
-          bg={useColorModeValue('light-container', 'dark-container')}
+          bg="rgba(30, 41, 59, 0.4)"
+          backdropFilter="blur(10px)"
+          border="1px solid rgba(255, 255, 255, 0.08)"
           boxShadow={'xl'}
-          rounded={'lg'}
+          rounded={'xl'}
           p={6}
         >
           <Heading
@@ -183,7 +184,7 @@ export default function Connect() {
                 _placeholder={{
                   color: 'gray.400',
                 }}
-                borderColor={useColorModeValue('gray.300', 'gray.700')}
+                borderColor={'rgba(255, 255, 255, 0.08)'}
                 id={'address'}
                 type={'url'}
                 required
@@ -198,13 +199,10 @@ export default function Connect() {
             </FormControl>
             <FormControl w={{ base: '100%', md: '40%' }}>
               <Button
-                backgroundColor={useColorModeValue('light-theme', 'dark-theme')}
+                backgroundColor={'#9333ea'}
                 color={'white'}
                 _hover={{
-                  backgroundColor: useColorModeValue(
-                    'dark-theme',
-                    'light-theme'
-                  ),
+                  backgroundColor: '#7e22ce',
                 }}
                 isLoading={state === 'submitting'}
                 w="100%"
@@ -236,9 +234,11 @@ export default function Connect() {
             return (
               <Flex
                 maxW={'lg'}
-                bg={useColorModeValue('light-container', 'dark-container')}
+                bg="rgba(30, 41, 59, 0.4)"
+                backdropFilter="blur(10px)"
+                border="1px solid rgba(255, 255, 255, 0.08)"
                 boxShadow={'lg'}
-                rounded={'sm'}
+                rounded={'xl'}
                 px={6}
                 py={4}
                 justifyContent="space-between"
@@ -257,16 +257,10 @@ export default function Connect() {
                 </Box>
                 <IconButton
                   onClick={() => selectChain(chain.rpc)}
-                  backgroundColor={useColorModeValue(
-                    'light-theme',
-                    'dark-theme'
-                  )}
+                  backgroundColor={'#9333ea'}
                   color={'white'}
                   _hover={{
-                    backgroundColor: useColorModeValue(
-                      'dark-theme',
-                      'light-theme'
-                    ),
+                    backgroundColor: '#7e22ce',
                   }}
                   aria-label="Connect RPC"
                   size="sm"

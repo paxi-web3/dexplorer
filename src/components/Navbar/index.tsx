@@ -11,9 +11,7 @@ import {
   IconButton,
   Input,
   Skeleton,
-  useColorMode,
   Button,
-  useColorModeValue,
   useDisclosure,
   useToast,
   Modal,
@@ -59,7 +57,6 @@ export default function Navbar() {
   const [newAddress, setNewAddress] = useState('')
   const [error, setError] = useState(false)
 
-  const { colorMode, toggleColorMode } = useColorMode()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const {
     isOpen: isOpenRPCs,
@@ -205,24 +202,24 @@ export default function Navbar() {
   return (
     <>
       <Box
-        bg={useColorModeValue('light-container', 'dark-container')}
+        bg="rgba(30, 41, 59, 0.4)"
+        backdropFilter="blur(10px)"
+        border="1px solid rgba(255, 255, 255, 0.08)"
         w="100%"
         p={4}
         shadow={'base'}
-        borderRadius={4}
+        borderRadius="xl"
         marginBottom={4}
         display={'flex'}
         justifyContent={'space-between'}
       >
         <HStack>
-          <Icon mr="4" fontSize="32" color={'green.600'} as={FiRadio} />
+          <Icon mr="4" fontSize="32" color={'#06b6d4'} as={FiRadio} />
           <Flex
             flexDirection="row"
             gap="4"
             border="1px"
-            p="2"
-            borderRadius="md"
-            borderColor={useColorModeValue('gray.500', 'gray.100')}
+            borderColor={'rgba(255, 255, 255, 0.08)'}
           >
             <Box>
               <Skeleton isLoaded={isLoadedSkeleton}>
@@ -233,7 +230,9 @@ export default function Navbar() {
                 </Heading>
               </Skeleton>
               <Skeleton isLoaded={isLoadedSkeleton}>
-                <Text fontSize="sm">{address}</Text>
+                <Text fontSize="sm" color="#94a3b8">
+                  {address}
+                </Text>
               </Skeleton>
             </Box>
             <IconButton
@@ -256,27 +255,24 @@ export default function Navbar() {
             onClick={onOpen}
             display={{ base: 'none', md: 'flex' }}
           />
-          <IconButton
-            variant="ghost"
-            aria-label="Color mode"
-            size="md"
-            fontSize="20"
-            icon={colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-            onClick={toggleColorMode}
-            display={{ base: 'none', md: 'flex' }}
-          />
         </HStack>
       </Box>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Search</ModalHeader>
-          <ModalCloseButton />
+        <ModalContent bg="#0b0f19" border="1px solid rgba(255, 255, 255, 0.08)">
+          <ModalHeader color="white">Search</ModalHeader>
+          <ModalCloseButton color="white" />
           <ModalBody>
             <Input
               width={400}
               type={'text'}
-              borderColor={useColorModeValue('light-theme', 'dark-theme')}
+              borderColor={'rgba(255, 255, 255, 0.08)'}
+              _focus={{
+                borderColor: '#a855f7',
+                boxShadow: '0 0 0 1px #a855f7',
+              }}
+              color="white"
+              _placeholder={{ color: 'gray.500' }}
               placeholder="Height/Transaction/Account Address"
               onChange={handleInputSearch}
             />
@@ -284,9 +280,9 @@ export default function Navbar() {
 
           <ModalFooter>
             <Button
-              bg={useColorModeValue('light-theme', 'dark-theme')}
+              bg={'#9333ea'}
               _hover={{
-                opacity: 0.8,
+                bg: '#7e22ce',
               }}
               color="white"
               w="full"
@@ -301,9 +297,9 @@ export default function Navbar() {
 
       <Modal isOpen={isOpenRPCs} onClose={onCloseRPCs}>
         <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Change Connection</ModalHeader>
-          <ModalCloseButton />
+        <ModalContent bg="#0b0f19" border="1px solid rgba(255, 255, 255, 0.08)">
+          <ModalHeader color="white">Change Connection</ModalHeader>
+          <ModalCloseButton color="white" />
           <ModalBody>
             <Stack
               direction={{ base: 'column', md: 'row' }}
@@ -319,7 +315,11 @@ export default function Navbar() {
                   _placeholder={{
                     color: 'gray.400',
                   }}
-                  borderColor={useColorModeValue('gray.300', 'gray.700')}
+                  borderColor={'rgba(255, 255, 255, 0.08)'}
+                  _focus={{
+                    borderColor: '#a855f7',
+                    boxShadow: '0 0 0 1px #a855f7',
+                  }}
                   id={'newAddress'}
                   type={'url'}
                   required
@@ -334,16 +334,10 @@ export default function Navbar() {
               </FormControl>
               <FormControl w={{ base: '100%', md: '40%' }}>
                 <Button
-                  backgroundColor={useColorModeValue(
-                    'light-theme',
-                    'dark-theme'
-                  )}
+                  backgroundColor={'#9333ea'}
                   color={'white'}
                   _hover={{
-                    backgroundColor: useColorModeValue(
-                      'dark-theme',
-                      'light-theme'
-                    ),
+                    backgroundColor: '#7e22ce',
                   }}
                   isLoading={state === 'submitting'}
                   w="100%"
@@ -356,7 +350,12 @@ export default function Navbar() {
             <Text textAlign={'center'} color={error ? 'red.500' : 'gray.500'}>
               {error ? 'Oh no, cannot connect to websocket client! 😢' : '‎'}
             </Text>
-            <Text m={2} textAlign={'center'} fontWeight="semibold">
+            <Text
+              m={2}
+              textAlign={'center'}
+              fontWeight="semibold"
+              color="gray.300"
+            >
               Available RPCs
             </Text>
             <Stack spacing={4} mb="4">
@@ -365,14 +364,15 @@ export default function Navbar() {
                   w="full"
                   border="1px"
                   borderRadius="md"
-                  borderColor={useColorModeValue('gray.500', 'gray.100')}
+                  borderColor={'rgba(255, 255, 255, 0.08)'}
                   p={2}
                   justifyContent="space-between"
                   alignItems="center"
                   key={rpc}
+                  _hover={{ bg: 'rgba(255, 255, 255, 0.05)' }}
                 >
                   <Box>
-                    <Text fontSize="sm" wordBreak="break-all">
+                    <Text fontSize="sm" wordBreak="break-all" color="gray.200">
                       {rpc}
                     </Text>
                   </Box>
@@ -380,16 +380,10 @@ export default function Navbar() {
                     <Stack direction="row">
                       <IconButton
                         onClick={() => selectChain(rpc)}
-                        backgroundColor={useColorModeValue(
-                          'light-theme',
-                          'dark-theme'
-                        )}
+                        backgroundColor={'#9333ea'}
                         color={'white'}
                         _hover={{
-                          backgroundColor: useColorModeValue(
-                            'dark-theme',
-                            'light-theme'
-                          ),
+                          backgroundColor: '#7e22ce',
                         }}
                         aria-label="Connect RPC"
                         size="sm"
@@ -398,16 +392,10 @@ export default function Navbar() {
                       />
                       <IconButton
                         onClick={() => removeChain(rpc)}
-                        backgroundColor={useColorModeValue(
-                          'red.500',
-                          'red.400'
-                        )}
+                        backgroundColor={'red.400'}
                         color={'white'}
                         _hover={{
-                          backgroundColor: useColorModeValue(
-                            'red.400',
-                            'red.500'
-                          ),
+                          backgroundColor: 'red.500',
                         }}
                         aria-label="Remove RPC"
                         size="sm"
@@ -416,7 +404,7 @@ export default function Navbar() {
                       />
                     </Stack>
                   ) : (
-                    <Text fontSize="sm" fontWeight="semibold">
+                    <Text fontSize="sm" fontWeight="semibold" color="#a855f7">
                       Connected
                     </Text>
                   )}

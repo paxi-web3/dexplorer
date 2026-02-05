@@ -1,5 +1,6 @@
 export const LS_RPC_ADDRESS = 'RPC_ADDRESS'
 export const LS_RPC_ADDRESS_LIST = 'RPC_ADDRESS_LIST'
+export const MAINNET_RPC_ADDRESS = 'https://mainnet-rpc.paxinet.io'
 export const GOV_PARAMS_TYPE = {
   VOTING: 'voting',
   DEPOSIT: 'deposit',

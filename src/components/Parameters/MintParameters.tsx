@@ -7,16 +7,16 @@ import {
   Skeleton,
   Text,
   Tooltip,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectTmClient } from '@/store/connectSlice'
-import { selectCustomMintParams, setCustomMintParams } from '@/store/paramsSlice'
-import { queryCustomMintParams } from '@/rpc/abci'
 import {
-  toDisplayPercent,
-} from '@/utils/helper'
+  selectCustomMintParams,
+  setCustomMintParams,
+} from '@/store/paramsSlice'
+import { queryCustomMintParams } from '@/rpc/abci'
+import { toDisplayPercent } from '@/utils/helper'
 
 export default function MintParameters() {
   const [isHidden, setIsHidden] = useState(false)
@@ -52,7 +52,7 @@ export default function MintParameters() {
   return (
     <Box
       mt={6}
-      bg={useColorModeValue('light-container', 'dark-container')}
+      bg={'dark-container'}
       shadow={'base'}
       borderRadius={4}
       p={6}
@@ -66,7 +66,7 @@ export default function MintParameters() {
           <InfoOutlineIcon
             boxSize={5}
             justifyItems={'center'}
-            color={useColorModeValue('light-theme', 'dark-theme')}
+            color={'dark-theme'}
           />
         </Tooltip>
         <Heading size={'md'} fontWeight={'medium'}>

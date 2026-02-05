@@ -12,7 +12,6 @@ import {
 } from 'cosmjs-types/cosmos/gov/v1/gov'
 import { QueryParamsResponse as CustomMintParams } from '@/ts_proto/x/custommint/types/query'
 
-
 // Type for our state
 export interface ParamsState {
   stakingParams: StakingParams | null

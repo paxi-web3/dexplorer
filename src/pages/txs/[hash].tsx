@@ -49,6 +49,14 @@ export default function DetailBlock() {
   const [block, setBlock] = useState<Block | null>(null)
   const [msgs, setMsgs] = useState<DecodeMsg[]>([])
 
+  // Reset state when hash changes
+  useEffect(() => {
+    setTx(null)
+    setTxData(null)
+    setBlock(null)
+    setMsgs([])
+  }, [hash])
+
   useEffect(() => {
     if (tmClient && hash) {
       getTx(tmClient, hash as string)

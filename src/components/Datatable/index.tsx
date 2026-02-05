@@ -18,6 +18,7 @@ import {
   Select,
   Text,
   SkeletonText,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import {
   ArrowLeftIcon,
@@ -168,6 +169,8 @@ export default function DataTable<Data extends object>({
               icon={<ArrowLeftIcon h={3} w={3} />}
               mr={4}
               aria-label="First Page"
+              variant="ghost"
+              color={useColorModeValue('light-theme', 'dark-theme')}
             />
           </Tooltip>
           <Tooltip label="Previous Page">
@@ -176,6 +179,8 @@ export default function DataTable<Data extends object>({
               disabled={!table.getCanPreviousPage()}
               icon={<ChevronLeftIcon h={6} w={6} />}
               aria-label="Previous Page"
+              variant="ghost"
+              color={useColorModeValue('light-theme', 'dark-theme')}
             />
           </Tooltip>
         </Flex>
@@ -204,7 +209,13 @@ export default function DataTable<Data extends object>({
             }}
             defaultValue={pageIndex + 1}
           >
-            <NumberInputField />
+            <NumberInputField
+              bg="rgba(10, 13, 22, 0.5)"
+              borderColor={useColorModeValue(
+                'whiteAlpha.200',
+                'whiteAlpha.200'
+              )}
+            />
             <NumberInputStepper>
               <NumberIncrementStepper />
               <NumberDecrementStepper />
@@ -216,6 +227,8 @@ export default function DataTable<Data extends object>({
             onChange={(e) => {
               table.setPageSize(Number(e.target.value))
             }}
+            bg="rgba(10, 13, 22, 0.5)"
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
           >
             {[10, 20, 30, 40, 50].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
@@ -232,6 +245,8 @@ export default function DataTable<Data extends object>({
               disabled={!table.getCanNextPage()}
               icon={<ChevronRightIcon h={6} w={6} />}
               aria-label="Next Page"
+              variant="ghost"
+              color={useColorModeValue('light-theme', 'dark-theme')}
             />
           </Tooltip>
           <Tooltip label="Last Page">
@@ -241,6 +256,8 @@ export default function DataTable<Data extends object>({
               icon={<ArrowRightIcon h={3} w={3} />}
               ml={4}
               aria-label="Last Page"
+              variant="ghost"
+              color={useColorModeValue('light-theme', 'dark-theme')}
             />
           </Tooltip>
         </Flex>

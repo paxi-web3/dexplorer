@@ -22,10 +22,11 @@ const CodeBlock = ({
     <Box
       as="pre"
       bg={bgColor}
-      borderRadius={4}
+      borderRadius="xl"
       p={4}
       border={'1px'}
-      borderColor={useColorModeValue('gray.300', 'gray.700')}
+      borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+      boxShadow="0 10px 24px rgba(7, 10, 18, 0.55)"
       overflowX="auto"
     >
       <SyntaxHighlighter

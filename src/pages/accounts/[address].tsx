@@ -24,6 +24,7 @@ import {
   Spinner,
   Image,
   Badge,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { FiChevronRight, FiHome, FiCheckCircle } from 'react-icons/fi'
 import NextLink from 'next/link'
@@ -335,14 +336,14 @@ export default function DetailAccount() {
     if (messages.length == 1) {
       return (
         <HStack>
-          <Tag colorScheme="cyan">{getTypeMsg(messages[0].typeUrl)}</Tag>
+          <Tag colorScheme="purple">{getTypeMsg(messages[0].typeUrl)}</Tag>
         </HStack>
       )
     } else if (messages.length > 1) {
       return (
         <HStack>
-          <Tag colorScheme="cyan">{getTypeMsg(messages[0].typeUrl)}</Tag>
-          <Text textColor="cyan.800">+{messages.length - 1}</Text>
+          <Tag colorScheme="purple">{getTypeMsg(messages[0].typeUrl)}</Tag>
+          <Text textColor="whiteAlpha.700">+{messages.length - 1}</Text>
         </HStack>
       )
     }
@@ -361,7 +362,11 @@ export default function DetailAccount() {
       <main>
         <HStack h="24px">
           <Heading size={'md'}>Account</Heading>
-          <Divider borderColor={'gray'} size="10px" orientation="vertical" />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            size="10px"
+            orientation="vertical"
+          />
           <Link
             as={NextLink}
             href={'/'}
@@ -370,7 +375,11 @@ export default function DetailAccount() {
             display="flex"
             justifyContent="center"
           >
-            <Icon fontSize="16" color="#06b6d4" as={FiHome} />
+            <Icon
+              fontSize="16"
+              color={useColorModeValue('light-theme', 'dark-theme')}
+              as={FiHome}
+            />
           </Link>
           <Icon fontSize="16" as={FiChevronRight} />
           <Text>Accounts</Text>
@@ -379,17 +388,21 @@ export default function DetailAccount() {
         </HStack>
         <Box
           mt={8}
-          bg="rgba(30, 41, 59, 0.4)"
+          bg={useColorModeValue('light-container', 'dark-container')}
           backdropFilter="blur(10px)"
-          border="1px solid rgba(255, 255, 255, 0.08)"
-          shadow={'base'}
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
           borderRadius="xl"
           p={4}
         >
           <Heading size={'md'} mb={4}>
             Profile
           </Heading>
-          <Divider borderColor={'rgba(255, 255, 255, 0.08)'} mb={4} />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            mb={4}
+          />
           <TableContainer>
             <Table variant="unstyled" size={'sm'}>
               <Tbody>
@@ -439,10 +452,11 @@ export default function DetailAccount() {
 
         <Box
           mt={8}
-          bg="rgba(30, 41, 59, 0.4)"
+          bg={useColorModeValue('light-container', 'dark-container')}
           backdropFilter="blur(10px)"
-          border="1px solid rgba(255, 255, 255, 0.08)"
-          shadow={'base'}
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
           borderRadius="xl"
           p={4}
         >
@@ -478,7 +492,7 @@ export default function DetailAccount() {
                                   borderRadius="full"
                                 />
                               )}
-                              <Text color="gray.200">
+                              <Text color="whiteAlpha.700">
                                 {denomNames[item.denom] || item.denom}
                               </Text>
                             </HStack>
@@ -513,7 +527,7 @@ export default function DetailAccount() {
                               boxSize="20px"
                               borderRadius="full"
                             />
-                            <Text>PAXI</Text>
+                            <Text color="whiteAlpha.700">PAXI</Text>
                           </HStack>
                         </Td>
                         <Td>
@@ -534,17 +548,21 @@ export default function DetailAccount() {
 
         <Box
           mt={8}
-          bg="rgba(30, 41, 59, 0.4)"
+          bg={useColorModeValue('light-container', 'dark-container')}
           backdropFilter="blur(10px)"
-          border="1px solid rgba(255, 255, 255, 0.08)"
-          shadow={'base'}
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
           borderRadius="xl"
           p={4}
         >
           <Heading size={'md'} mb={4}>
             PRC-20 Assets
           </Heading>
-          <Divider borderColor={'rgba(255, 255, 255, 0.08)'} mb={4} />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            mb={4}
+          />
           <TableContainer>
             <Table variant="simple" size="sm">
               <Thead>
@@ -572,7 +590,14 @@ export default function DetailAccount() {
                           _focus={{ boxShadow: 'none' }}
                         >
                           <HStack spacing={2}>
-                            <Text color="#06b6d4">{asset.contract.name}</Text>
+                            <Text
+                              color={useColorModeValue(
+                                'light-theme',
+                                'dark-theme'
+                              )}
+                            >
+                              {asset.contract.name}
+                            </Text>
                             {asset.contract.official_verified && (
                               <Icon
                                 as={FiCheckCircle}
@@ -586,7 +611,7 @@ export default function DetailAccount() {
                               </Badge>
                             )}
                           </HStack>
-                          <Text fontSize="sm" color="gray.500">
+                          <Text fontSize="sm" color="whiteAlpha.600">
                             {asset.contract.symbol}
                           </Text>
                         </Link>
@@ -605,12 +630,14 @@ export default function DetailAccount() {
             </Table>
           </TableContainer>
           {prc20Assets.length === 0 && !isFetchingPrc20 && (
-            <Text color="gray.500" textAlign="center" py={4}>
+            <Text color="whiteAlpha.600" textAlign="center" py={4}>
               No PRC-20 assets found
             </Text>
           )}
           <Box textAlign="center" py={4}>
-            {isFetchingPrc20 && <Spinner color="#a855f7" />}
+            {isFetchingPrc20 && (
+              <Spinner color={useColorModeValue('light-theme', 'dark-theme')} />
+            )}
             {hasMorePrc20 && prc20Assets.length > 0 && !isFetchingPrc20 && (
               <Button
                 colorScheme="purple"
@@ -623,24 +650,28 @@ export default function DetailAccount() {
               </Button>
             )}
             {!hasMorePrc20 && prc20Assets.length > 0 && (
-              <Text color="gray.500">No more assets to load</Text>
+              <Text color="whiteAlpha.600">No more assets to load</Text>
             )}
           </Box>
         </Box>
 
         <Box
           mt={8}
-          bg="rgba(30, 41, 59, 0.4)"
+          bg={useColorModeValue('light-container', 'dark-container')}
           backdropFilter="blur(10px)"
-          border="1px solid rgba(255, 255, 255, 0.08)"
-          shadow={'base'}
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
           borderRadius="xl"
           p={4}
         >
           <Heading size={'md'} mb={4}>
             Transactions
           </Heading>
-          <Divider borderColor={'rgba(255, 255, 255, 0.08)'} mb={4} />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            mb={4}
+          />
           <TableContainer>
             <Table variant="simple">
               <Thead>
@@ -661,7 +692,11 @@ export default function DetailAccount() {
                         style={{ textDecoration: 'none' }}
                         _focus={{ boxShadow: 'none' }}
                       >
-                        <Text color="#06b6d4">{trimHash(tx.hash)}</Text>
+                        <Text
+                          color={useColorModeValue('light-theme', 'dark-theme')}
+                        >
+                          {trimHash(tx.hash)}
+                        </Text>
                       </Link>
                     </Td>
                     <Td>{renderMessages(tx.data.messages)}</Td>
@@ -673,7 +708,11 @@ export default function DetailAccount() {
                         style={{ textDecoration: 'none' }}
                         _focus={{ boxShadow: 'none' }}
                       >
-                        <Text color="#06b6d4">{tx.height}</Text>
+                        <Text
+                          color={useColorModeValue('light-theme', 'dark-theme')}
+                        >
+                          {tx.height}
+                        </Text>
                       </Link>
                     </Td>
                   </Tr>
@@ -682,9 +721,11 @@ export default function DetailAccount() {
             </Table>
           </TableContainer>
           <Box ref={txLoaderRef} textAlign="center" py={4}>
-            {isFetchingTxs && <Spinner color="#a855f7" />}
+            {isFetchingTxs && (
+              <Spinner color={useColorModeValue('light-theme', 'dark-theme')} />
+            )}
             {!hasMoreTxs && txs.length > 0 && (
-              <Text color="gray.500">No more transactions to load</Text>
+              <Text color="whiteAlpha.600">No more transactions to load</Text>
             )}
           </Box>
         </Box>

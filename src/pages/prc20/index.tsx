@@ -22,6 +22,7 @@ import {
   InputGroup,
   InputLeftElement,
   IconButton,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { useEffect, useState, useCallback, useRef } from 'react'
 import NextLink from 'next/link'
@@ -201,7 +202,11 @@ export default function PRC20() {
       <main>
         <HStack h="24px">
           <Heading size={'md'}>PRC-20 Assets</Heading>
-          <Divider borderColor={'gray'} size="10px" orientation="vertical" />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            size="10px"
+            orientation="vertical"
+          />
           <Link
             as={NextLink}
             href={'/'}
@@ -210,7 +215,11 @@ export default function PRC20() {
             display="flex"
             justifyContent="center"
           >
-            <Icon fontSize="16" color="#06b6d4" as={FiHome} />
+            <Icon
+              fontSize="16"
+              color={useColorModeValue('light-theme', 'dark-theme')}
+              as={FiHome}
+            />
           </Link>
           <Icon fontSize="16" as={FiChevronRight} />
           <Text>PRC-20</Text>
@@ -218,10 +227,11 @@ export default function PRC20() {
 
         <Box
           mt={8}
-          bg="rgba(30, 41, 59, 0.4)"
+          bg={useColorModeValue('light-container', 'dark-container')}
           backdropFilter="blur(10px)"
-          border="1px solid rgba(255, 255, 255, 0.08)"
-          shadow={'base'}
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
           borderRadius="xl"
           p={4}
         >
@@ -230,18 +240,18 @@ export default function PRC20() {
             <HStack spacing={2} alignItems="center">
               <InputGroup size="sm" maxW="300px">
                 <InputLeftElement>
-                  <Icon as={FiSearch} color="gray.400" />
+                  <Icon as={FiSearch} color="whiteAlpha.500" />
                 </InputLeftElement>
                 <Input
                   placeholder="Search by name or address"
                   value={searchQuery}
                   onChange={handleSearchChange}
-                  borderColor="rgba(255, 255, 255, 0.08)"
-                  color="white"
-                  _focus={{
-                    borderColor: '#a855f7',
-                    boxShadow: '0 0 0 1px #a855f7',
-                  }}
+                  borderColor={useColorModeValue(
+                    'whiteAlpha.200',
+                    'whiteAlpha.200'
+                  )}
+                  color="whiteAlpha.900"
+                  bg="rgba(10, 13, 22, 0.5)"
                 />
                 {searchQuery && (
                   <IconButton
@@ -256,8 +266,10 @@ export default function PRC20() {
                 )}
               </InputGroup>
               <Box
-                bg="#9333ea"
-                color="white"
+                bg="rgba(179, 133, 247, 0.14)"
+                color={useColorModeValue('light-theme', 'dark-theme')}
+                border="1px solid"
+                borderColor="rgba(179, 133, 247, 0.4)"
                 px={3}
                 py={1}
                 borderRadius="md"
@@ -269,11 +281,22 @@ export default function PRC20() {
               </Box>
             </HStack>
           </HStack>
-          <Divider borderColor={'rgba(255, 255, 255, 0.08)'} mb={4} />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            mb={4}
+          />
           {isSearching && (
             <Box textAlign="center" py={4}>
-              <Spinner color="#a855f7" size="sm" />
-              <Text fontSize="sm" color="gray.500" ml={2} display="inline">
+              <Spinner
+                color={useColorModeValue('light-theme', 'dark-theme')}
+                size="sm"
+              />
+              <Text
+                fontSize="sm"
+                color="whiteAlpha.600"
+                ml={2}
+                display="inline"
+              >
                 Searching...
               </Text>
             </Box>
@@ -329,11 +352,14 @@ export default function PRC20() {
                           >
                             <Text
                               fontSize="xs"
-                              color="gray.500"
+                              color="whiteAlpha.600"
                               isTruncated
                               maxW="180px"
                               _hover={{
-                                color: '#06b6d4',
+                                color: useColorModeValue(
+                                  'light-theme',
+                                  'dark-theme'
+                                ),
                               }}
                             >
                               {contract.contract_address}
@@ -345,9 +371,9 @@ export default function PRC20() {
                     <Td>
                       <Tag
                         size="sm"
-                        bg="rgba(147, 51, 234, 0.2)"
-                        color="#d8b4fe"
-                        border="1px solid rgba(147, 51, 234, 0.5)"
+                        bg="rgba(179, 133, 247, 0.18)"
+                        color="whiteAlpha.900"
+                        border="1px solid rgba(179, 133, 247, 0.45)"
                       >
                         {contract.symbol}
                       </Tag>
@@ -372,7 +398,7 @@ export default function PRC20() {
                         <Text color="green.500" fontSize="sm">
                           {contract.buys}
                         </Text>
-                        <Text color="gray.500">/</Text>
+                        <Text color="whiteAlpha.600">/</Text>
                         <Text color="red.500" fontSize="sm">
                           {contract.sells}
                         </Text>
@@ -387,16 +413,20 @@ export default function PRC20() {
           {searchQuery ? (
             <Box textAlign="center" py={4}>
               {!isSearching && searchResults.length === 0 && (
-                <Text color="gray.500">
+                <Text color="whiteAlpha.600">
                   No tokens found for &quot;{searchQuery}&quot;
                 </Text>
               )}
             </Box>
           ) : (
             <Box ref={loaderRef} textAlign="center" py={4}>
-              {isFetching && <Spinner color="#a855f7" />}
+              {isFetching && (
+                <Spinner
+                  color={useColorModeValue('light-theme', 'dark-theme')}
+                />
+              )}
               {!hasMore && contracts.length > 0 && (
-                <Text color="gray.500">No more tokens to load</Text>
+                <Text color="whiteAlpha.600">No more tokens to load</Text>
               )}
             </Box>
           )}

@@ -10,6 +10,7 @@ import {
   Flex,
   Box,
   IconButton,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { CheckIcon } from '@chakra-ui/icons'
 import { useDispatch } from 'react-redux'
@@ -145,15 +146,16 @@ export default function Connect() {
         minH={'100vh'}
         align={'center'}
         justify={'center'}
-        bg="#0b0f19"
+        bg={useColorModeValue('light-bg', 'dark-bg')}
         flexDirection={'column'}
         gap={16}
       >
         <Container
           maxW={'lg'}
-          bg="rgba(30, 41, 59, 0.4)"
+          bg={useColorModeValue('light-container', 'dark-container')}
           backdropFilter="blur(10px)"
-          border="1px solid rgba(255, 255, 255, 0.08)"
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
           boxShadow={'xl'}
           rounded={'xl'}
           p={6}
@@ -180,11 +182,14 @@ export default function Connect() {
               <Input
                 variant={'solid'}
                 borderWidth={1}
-                color={'gray.800'}
+                color={'whiteAlpha.900'}
                 _placeholder={{
-                  color: 'gray.400',
+                  color: 'whiteAlpha.500',
                 }}
-                borderColor={'rgba(255, 255, 255, 0.08)'}
+                borderColor={useColorModeValue(
+                  'whiteAlpha.200',
+                  'whiteAlpha.200'
+                )}
                 id={'address'}
                 type={'url'}
                 required
@@ -199,10 +204,10 @@ export default function Connect() {
             </FormControl>
             <FormControl w={{ base: '100%', md: '40%' }}>
               <Button
-                backgroundColor={'#9333ea'}
-                color={'white'}
+                backgroundColor={useColorModeValue('light-theme', 'dark-theme')}
+                color={'#0a0d16'}
                 _hover={{
-                  backgroundColor: '#7e22ce',
+                  backgroundColor: '#c79bff',
                 }}
                 isLoading={state === 'submitting'}
                 w="100%"
@@ -215,7 +220,7 @@ export default function Connect() {
           <Text
             mt={2}
             textAlign={'center'}
-            color={error ? 'red.500' : 'gray.500'}
+            color={error ? 'red.500' : 'whiteAlpha.600'}
           >
             {error ? 'Oh no, cannot connect to websocket client! 😢' : ''}
           </Text>
@@ -234,9 +239,13 @@ export default function Connect() {
             return (
               <Flex
                 maxW={'lg'}
-                bg="rgba(30, 41, 59, 0.4)"
+                bg={useColorModeValue('light-container', 'dark-container')}
                 backdropFilter="blur(10px)"
-                border="1px solid rgba(255, 255, 255, 0.08)"
+                border="1px solid"
+                borderColor={useColorModeValue(
+                  'whiteAlpha.200',
+                  'whiteAlpha.200'
+                )}
                 boxShadow={'lg'}
                 rounded={'xl'}
                 px={6}
@@ -257,10 +266,13 @@ export default function Connect() {
                 </Box>
                 <IconButton
                   onClick={() => selectChain(chain.rpc)}
-                  backgroundColor={'#9333ea'}
-                  color={'white'}
+                  backgroundColor={useColorModeValue(
+                    'light-theme',
+                    'dark-theme'
+                  )}
+                  color={'#0a0d16'}
                   _hover={{
-                    backgroundColor: '#7e22ce',
+                    backgroundColor: '#c79bff',
                   }}
                   aria-label="Connect RPC"
                   size="sm"

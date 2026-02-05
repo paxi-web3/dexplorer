@@ -7,6 +7,7 @@ import {
   Skeleton,
   Text,
   Tooltip,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -52,9 +53,11 @@ export default function MintParameters() {
   return (
     <Box
       mt={6}
-      bg={'dark-container'}
-      shadow={'base'}
-      borderRadius={4}
+      bg={useColorModeValue('light-container', 'dark-container')}
+      shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+      borderRadius="xl"
+      border="1px solid"
+      borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
       p={6}
       hidden={isHidden}
     >
@@ -66,7 +69,7 @@ export default function MintParameters() {
           <InfoOutlineIcon
             boxSize={5}
             justifyItems={'center'}
-            color={'dark-theme'}
+            color={useColorModeValue('light-theme', 'dark-theme')}
           />
         </Tooltip>
         <Heading size={'md'} fontWeight={'medium'}>

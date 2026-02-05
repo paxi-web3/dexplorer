@@ -117,7 +117,11 @@ export default function Holders() {
       <main>
         <HStack h="24px">
           <Heading size={'md'}>Holders</Heading>
-          <Divider borderColor={'gray'} size="10px" orientation="vertical" />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            size="10px"
+            orientation="vertical"
+          />
           <Link
             as={NextLink}
             href={'/'}
@@ -139,8 +143,11 @@ export default function Holders() {
         <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4} mt={8}>
           <Box
             bg={useColorModeValue('light-container', 'dark-container')}
-            shadow={'base'}
-            borderRadius={4}
+            backdropFilter="blur(10px)"
+            border="1px solid"
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+            borderRadius="xl"
             p={4}
           >
             <Stat>
@@ -154,8 +161,11 @@ export default function Holders() {
           </Box>
           <Box
             bg={useColorModeValue('light-container', 'dark-container')}
-            shadow={'base'}
-            borderRadius={4}
+            backdropFilter="blur(10px)"
+            border="1px solid"
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+            borderRadius="xl"
             p={4}
           >
             <Stat>
@@ -167,8 +177,11 @@ export default function Holders() {
           </Box>
           <Box
             bg={useColorModeValue('light-container', 'dark-container')}
-            shadow={'base'}
-            borderRadius={4}
+            backdropFilter="blur(10px)"
+            border="1px solid"
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+            borderRadius="xl"
             p={4}
           >
             <Stat>
@@ -180,8 +193,11 @@ export default function Holders() {
           </Box>
           <Box
             bg={useColorModeValue('light-container', 'dark-container')}
-            shadow={'base'}
-            borderRadius={4}
+            backdropFilter="blur(10px)"
+            border="1px solid"
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+            borderRadius="xl"
             p={4}
           >
             <Stat>
@@ -196,14 +212,20 @@ export default function Holders() {
         <Box
           mt={8}
           bg={useColorModeValue('light-container', 'dark-container')}
-          shadow={'base'}
-          borderRadius={4}
+          backdropFilter="blur(10px)"
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+          borderRadius="xl"
           p={4}
         >
           <Heading size={'md'} mb={4}>
             Top Holders
           </Heading>
-          <Divider borderColor={'gray'} mb={4} />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            mb={4}
+          />
           <TableContainer>
             <Table variant="simple">
               <Thead>
@@ -215,7 +237,12 @@ export default function Holders() {
               </Thead>
               <Tbody>
                 {holders.map((holder, index) => (
-                  <Tr key={`${holder.address}-${index}`}>
+                  <Tr
+                    key={`${holder.address}-${index}`}
+                    borderBottom="2px solid"
+                    borderColor="gray.800"
+                    _last={{ borderBottom: 'none' }}
+                  >
                     <Td>#{index + 1}</Td>
                     <Td>
                       <HStack spacing={2}>
@@ -237,7 +264,7 @@ export default function Holders() {
                             {holder.address}
                           </Text>
                         </Link>
-                        <Tag size="sm" colorScheme="cyan">
+                        <Tag size="sm" colorScheme="purple">
                           {holder.type.toUpperCase()}
                         </Tag>
                       </HStack>
@@ -255,9 +282,11 @@ export default function Holders() {
           </TableContainer>
 
           <Box ref={loaderRef} textAlign="center" py={4}>
-            {isFetching && <Spinner color="cyan.500" />}
+            {isFetching && (
+              <Spinner color={useColorModeValue('light-theme', 'dark-theme')} />
+            )}
             {!hasMore && holders.length > 0 && (
-              <Text color="gray.500">No more holders to load</Text>
+              <Text color="whiteAlpha.600">No more holders to load</Text>
             )}
           </Box>
         </Box>

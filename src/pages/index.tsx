@@ -89,7 +89,7 @@ export default function Home() {
       <main>
         <HStack h="24px">
           <Heading size={'md'}>Home</Heading>
-          <Divider borderColor={'gray'} size="10px" orientation="vertical" />
+          <Divider borderColor="gray.600" size="1px" orientation="vertical" />
           <Link
             as={NextLink}
             href={'/'}
@@ -111,8 +111,7 @@ export default function Home() {
           <SimpleGrid minChildWidth="200px" spacing="40px">
             <Skeleton isLoaded={isLoaded}>
               <BoxInfo
-                bgColor="cyan.200"
-                color="cyan.600"
+                colorScheme="accent1"
                 icon={FiBox}
                 name="Latest Block Height"
                 value={
@@ -124,8 +123,7 @@ export default function Home() {
             </Skeleton>
             <Skeleton isLoaded={isLoaded}>
               <BoxInfo
-                bgColor="green.200"
-                color="green.600"
+                colorScheme="accent2"
                 icon={FiClock}
                 name="Latest Block Time"
                 value={
@@ -142,8 +140,7 @@ export default function Home() {
 
             <Skeleton isLoaded={isLoaded}>
               <BoxInfo
-                bgColor="orange.200"
-                color="orange.600"
+                colorScheme="accent3"
                 icon={FiCpu}
                 name="Network"
                 value={
@@ -156,8 +153,7 @@ export default function Home() {
 
             <Skeleton isLoaded={isLoaded}>
               <BoxInfo
-                bgColor="purple.200"
-                color="purple.600"
+                colorScheme="accent4"
                 icon={FiUsers}
                 name="Validators"
                 value={validators}
@@ -166,8 +162,7 @@ export default function Home() {
 
             <Skeleton isLoaded={isLoaded}>
               <BoxInfo
-                bgColor="blue.100"
-                color="blue.600"
+                colorScheme="accent5"
                 icon={FiDollarSign}
                 name="Circulating Supply"
                 value={
@@ -182,8 +177,7 @@ export default function Home() {
 
             <Skeleton isLoaded={isLoaded}>
               <BoxInfo
-                bgColor="pink.100"
-                color="pink.600"
+                colorScheme="accent6"
                 icon={FiLock}
                 name="Locked Vesting"
                 value={
@@ -203,25 +197,22 @@ export default function Home() {
 }
 
 interface BoxInfoProps extends FlexProps {
-  bgColor: string
-  color: string
+  colorScheme: string
   icon: IconType
   name: string
   value: string | number | undefined
 }
-const BoxInfo = ({
-  bgColor,
-  color,
-  icon,
-  name,
-  value,
-  ...rest
-}: BoxInfoProps) => {
+const BoxInfo = ({ colorScheme, icon, name, value, ...rest }: BoxInfoProps) => {
+  const bgColor = useColorModeValue(`${colorScheme}.100`, `${colorScheme}.600`)
+  const color = useColorModeValue(`${colorScheme}.600`, `${colorScheme}.100`)
   return (
     <VStack
       bg={useColorModeValue('light-container', 'dark-container')}
-      shadow={'base'}
-      borderRadius={4}
+      backdropFilter="blur(10px)"
+      border="1px solid"
+      borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+      shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+      borderRadius="xl"
       p={4}
       height="150px"
     >
@@ -239,7 +230,9 @@ const BoxInfo = ({
         <Icon fontSize="20" color={color} as={icon} />
       </Box>
       <Heading size={'md'}>{value}</Heading>
-      <Text size={'sm'}>{name}</Text>
+      <Text size={'sm'} color="whiteAlpha.700">
+        {name}
+      </Text>
     </VStack>
   )
 }

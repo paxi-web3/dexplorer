@@ -43,7 +43,7 @@ const columns = [
     header: 'Title',
   }),
   columnHelper.accessor('types', {
-    cell: (info) => <Tag colorScheme="cyan">{info.getValue()}</Tag>,
+    cell: (info) => <Tag colorScheme="purple">{info.getValue()}</Tag>,
     header: 'Types',
   }),
   columnHelper.accessor('status', {
@@ -130,7 +130,11 @@ export default function Proposals() {
       <main>
         <HStack h="24px">
           <Heading size={'md'}>Proposals</Heading>
-          <Divider borderColor={'gray'} size="10px" orientation="vertical" />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            size="10px"
+            orientation="vertical"
+          />
           <Link
             as={NextLink}
             href={'/'}
@@ -151,8 +155,11 @@ export default function Proposals() {
         <Box
           mt={8}
           bg={useColorModeValue('light-container', 'dark-container')}
-          shadow={'base'}
-          borderRadius={4}
+          backdropFilter="blur(10px)"
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+          borderRadius="xl"
           p={4}
           overflowX="auto"
         >

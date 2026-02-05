@@ -15,9 +15,12 @@ export default function LoadingPage() {
         align={'center'}
         justify={'center'}
         w="100"
-        bg={useColorModeValue('gray.100', 'gray.900')}
+        bg={useColorModeValue('light-bg', 'dark-bg')}
       >
-        <Spinner size="xl" />
+        <Spinner
+          size="xl"
+          color={useColorModeValue('light-theme', 'dark-theme')}
+        />
       </Flex>
     </>
   )

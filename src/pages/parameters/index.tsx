@@ -28,7 +28,11 @@ export default function Parameters() {
       <main>
         <HStack h="24px">
           <Heading size={'md'}>Parameters</Heading>
-          <Divider borderColor={'gray'} size="10px" orientation="vertical" />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            size="10px"
+            orientation="vertical"
+          />
           <Link
             as={NextLink}
             href={'/'}

@@ -23,6 +23,7 @@ import {
   ModalFooter,
   Input,
   useToast,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import {
   FiHome,
@@ -135,9 +136,9 @@ export default function Sidebar({ children }: { children: ReactNode }) {
   }
 
   return (
-    <Box minH="100vh" bg="#0b0f19" color="gray.200">
+    <Box minH="100vh" bg={useColorModeValue('light-bg', 'dark-bg')}>
       <SidebarContent
-        onClose={() => onClose}
+        onClose={onClose}
         display={{ base: 'none', md: 'block' }}
       />
       <Drawer
@@ -157,9 +158,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
       <Modal isOpen={isSearchOpen} onClose={onCloseSearch}>
         <ModalOverlay />
         <ModalContent
-          bg="#0b0f19"
-          border="1px solid rgba(255, 255, 255, 0.08)"
-          color="white"
+          bg={useColorModeValue('light-container', 'dark-container')}
         >
           <ModalHeader>Search</ModalHeader>
           <ModalCloseButton />
@@ -167,10 +166,16 @@ export default function Sidebar({ children }: { children: ReactNode }) {
             <Input
               width={400}
               type={'text'}
-              borderColor="rgba(255, 255, 255, 0.08)"
+              borderColor={useColorModeValue(
+                'whiteAlpha.200',
+                'whiteAlpha.200'
+              )}
               _focus={{
-                borderColor: '#a855f7',
-                boxShadow: '0 0 0 1px #a855f7',
+                borderColor: useColorModeValue('light-theme', 'dark-theme'),
+                boxShadow: `0 0 0 1px ${useColorModeValue(
+                  'colors.light-theme',
+                  'colors.dark-theme'
+                )}`,
               }}
               placeholder="Height/Tx/Account/PRC-20"
               onChange={handleInputSearch}
@@ -179,9 +184,9 @@ export default function Sidebar({ children }: { children: ReactNode }) {
 
           <ModalFooter>
             <Button
-              bg="#9333ea"
+              bg={useColorModeValue('light-theme', 'dark-theme')}
               _hover={{
-                bg: '#7e22ce',
+                bg: useColorModeValue('purple.500', 'purple.500'),
               }}
               color="white"
               w="full"
@@ -225,9 +230,9 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
   return (
     <Box
-      bg="rgba(11, 15, 25, 0.95)"
+      bg={useColorModeValue('light-container', 'dark-container')}
       borderRight="1px"
-      borderRightColor="rgba(255, 255, 255, 0.08)"
+      borderRightColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"
@@ -241,16 +246,29 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             mx="8"
             justifyContent="space-between"
           >
-            <Text fontSize="20px" fontWeight="bold">
-              Paxi Explorer
-            </Text>
+            <Flex align="center" gap="3">
+              <Box
+                as="img"
+                src="/icon_transparent.png"
+                alt="Paxi Explorer logo"
+                boxSize="28px"
+              />
+              <Text fontSize="20px" fontWeight="bold">
+                Paxi Explorer
+              </Text>
+            </Flex>
             <CloseButton
               display={{ base: 'flex', md: 'none' }}
               onClick={onClose}
             />
           </Flex>
           {LinkItems.map((link) => (
-            <NavItem key={link.name} icon={link.icon} route={link.route}>
+            <NavItem
+              key={link.name}
+              icon={link.icon}
+              route={link.route}
+              onClick={onClose}
+            >
               {link.name}
             </NavItem>
           ))}
@@ -260,7 +278,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
             mx="4"
             size={'xs'}
             textTransform="uppercase"
-            textColor="gray.500"
+            textColor="whiteAlpha.500"
             fontWeight="medium"
           >
             Links
@@ -271,6 +289,7 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
               icon={link.icon}
               route={link.route}
               isBlank={link.isBlank}
+              onClick={onClose}
             >
               {link.name}
             </NavItem>
@@ -296,10 +315,23 @@ interface NavItemProps extends FlexProps {
   children: string | number
   route: string
   isBlank?: boolean
+  onClick?: () => void
 }
-const NavItem = ({ icon, children, route, isBlank, ...rest }: NavItemProps) => {
+const NavItem = ({
+  icon,
+  children,
+  route,
+  isBlank,
+  onClick,
+  ...rest
+}: NavItemProps) => {
   const router = useRouter()
   const [isSelected, setIsSelected] = useState(false)
+  const selectedColor = useColorModeValue('light-theme', 'dark-theme')
+  const hoverBg = useColorModeValue(
+    'rgba(179, 133, 247, 0.08)',
+    'rgba(179, 133, 247, 0.08)'
+  )
 
   useEffect(() => {
     if (route === '/') {
@@ -316,6 +348,7 @@ const NavItem = ({ icon, children, route, isBlank, ...rest }: NavItemProps) => {
       style={{ textDecoration: 'none' }}
       _focus={{ boxShadow: 'none' }}
       target={isBlank ? '_blank' : '_self'}
+      onClick={onClick}
     >
       <Flex
         align="center"
@@ -324,11 +357,17 @@ const NavItem = ({ icon, children, route, isBlank, ...rest }: NavItemProps) => {
         borderRadius="lg"
         role="group"
         cursor="pointer"
-        bg={isSelected ? 'rgba(147, 51, 234, 0.1)' : 'transparent'}
-        color={isSelected ? '#a855f7' : '#94a3b8'}
+        bg={
+          isSelected
+            ? useColorModeValue(
+                'rgba(179, 133, 247, 0.16)',
+                'rgba(179, 133, 247, 0.16)'
+              )
+            : 'transparent'
+        }
+        color={isSelected ? selectedColor : 'inherit'}
         _hover={{
-          bg: 'rgba(255, 255, 255, 0.05)',
-          color: isSelected ? '#a855f7' : 'white',
+          bg: hoverBg,
         }}
         {...rest}
       >
@@ -337,7 +376,7 @@ const NavItem = ({ icon, children, route, isBlank, ...rest }: NavItemProps) => {
             mr="4"
             fontSize="16"
             _groupHover={{
-              color: isSelected ? '#a855f7' : 'white',
+              color: selectedColor,
             }}
             as={icon}
           />
@@ -359,9 +398,9 @@ const MobileNav = ({ onOpen, onOpenSearch, ...rest }: MobileProps) => {
       px={{ base: 4, md: 24 }}
       height="20"
       alignItems="center"
-      bg="rgba(11, 15, 25, 0.95)"
+      bg={useColorModeValue('light-container', 'dark-container')}
       borderBottomWidth="1px"
-      borderBottomColor="rgba(255, 255, 255, 0.08)"
+      borderBottomColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
       justifyContent="space-between"
       {...rest}
     >
@@ -373,9 +412,17 @@ const MobileNav = ({ onOpen, onOpenSearch, ...rest }: MobileProps) => {
           icon={<FiMenu />}
         />
 
-        <Text fontSize="2xl" ml="8" fontWeight="bold">
-          Paxi Explorer
-        </Text>
+        <Flex align="center" ml="6" gap="3">
+          <Box
+            as="img"
+            src="/icon_transparent.png"
+            alt="Paxi Explorer logo"
+            boxSize="28px"
+          />
+          <Text fontSize="2xl" fontWeight="bold">
+            Paxi Explorer
+          </Text>
+        </Flex>
       </Flex>
 
       <Flex align="center" gap={2}>

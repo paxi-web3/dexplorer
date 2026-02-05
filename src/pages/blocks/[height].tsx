@@ -68,14 +68,14 @@ export default function DetailBlock() {
     if (messages.length == 1) {
       return (
         <HStack>
-          <Tag colorScheme="cyan">{getTypeMsg(messages[0].typeUrl)}</Tag>
+          <Tag colorScheme="purple">{getTypeMsg(messages[0].typeUrl)}</Tag>
         </HStack>
       )
     } else if (messages.length > 1) {
       return (
         <HStack>
-          <Tag colorScheme="cyan">{getTypeMsg(messages[0].typeUrl)}</Tag>
-          <Text textColor="cyan.800">+{messages.length - 1}</Text>
+          <Tag colorScheme="purple">{getTypeMsg(messages[0].typeUrl)}</Tag>
+          <Text textColor="whiteAlpha.700">+{messages.length - 1}</Text>
         </HStack>
       )
     }
@@ -88,7 +88,7 @@ export default function DetailBlock() {
       return (
         <HStack>
           <Text>{fees[0].amount}</Text>
-          <Text textColor="cyan.800">{fees[0].denom}</Text>
+          <Text textColor="whiteAlpha.600">{fees[0].denom}</Text>
         </HStack>
       )
     }
@@ -127,7 +127,11 @@ export default function DetailBlock() {
       <main>
         <HStack h="24px">
           <Heading size={'md'}>Block</Heading>
-          <Divider borderColor={'gray'} size="10px" orientation="vertical" />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            size="10px"
+            orientation="vertical"
+          />
           <Link
             as={NextLink}
             href={'/'}
@@ -159,14 +163,20 @@ export default function DetailBlock() {
         <Box
           mt={8}
           bg={useColorModeValue('light-container', 'dark-container')}
-          shadow={'base'}
-          borderRadius={4}
+          backdropFilter="blur(10px)"
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+          borderRadius="xl"
           p={4}
         >
           <Heading size={'md'} mb={4}>
             Header
           </Heading>
-          <Divider borderColor={'gray'} mb={4} />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            mb={4}
+          />
           <TableContainer>
             <Table variant="unstyled" size={'sm'}>
               <Tbody>
@@ -214,16 +224,35 @@ export default function DetailBlock() {
         <Box
           mt={8}
           bg={useColorModeValue('light-container', 'dark-container')}
-          shadow={'base'}
-          borderRadius={4}
+          backdropFilter="blur(10px)"
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+          borderRadius="xl"
           p={4}
         >
           <Heading size={'md'} mb={4}>
             Transactions
           </Heading>
-          <Divider borderColor={'gray'} mb={4} />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            mb={4}
+          />
           <TableContainer>
-            <Table variant="simple">
+            <Table
+              variant="simple"
+              sx={{
+                'tbody tr': {
+                  boxShadow: 'inset 0 -2px 0 0 var(--chakra-colors-gray-800)',
+                },
+                'tbody tr td': {
+                  borderBottom: 'none',
+                },
+                'tbody tr:last-of-type': {
+                  boxShadow: 'none',
+                },
+              }}
+            >
               <Thead>
                 <Tr>
                   <Th>Tx Hash</Th>
@@ -243,7 +272,11 @@ export default function DetailBlock() {
                         style={{ textDecoration: 'none' }}
                         _focus={{ boxShadow: 'none' }}
                       >
-                        <Text color={'cyan.400'}>{trimHash(tx.hash)}</Text>
+                        <Text
+                          color={useColorModeValue('light-theme', 'dark-theme')}
+                        >
+                          {trimHash(tx.hash)}
+                        </Text>
                       </Link>
                     </Td>
                     <Td>{renderMessages(tx.data.body?.messages)}</Td>

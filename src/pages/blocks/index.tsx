@@ -89,14 +89,14 @@ export default function Blocks() {
     } else if (messages.length == 1) {
       return (
         <HStack>
-          <Tag colorScheme="cyan">{getTypeMsg(messages[0].typeUrl)}</Tag>
+          <Tag colorScheme="purple">{getTypeMsg(messages[0].typeUrl)}</Tag>
         </HStack>
       )
     } else if (messages.length > 1) {
       return (
         <HStack>
-          <Tag colorScheme="cyan">{getTypeMsg(messages[0].typeUrl)}</Tag>
-          <Text textColor="cyan.800">+{messages.length - 1}</Text>
+          <Tag colorScheme="purple">{getTypeMsg(messages[0].typeUrl)}</Tag>
+          <Text textColor="whiteAlpha.700">+{messages.length - 1}</Text>
         </HStack>
       )
     }
@@ -113,7 +113,11 @@ export default function Blocks() {
       <main>
         <HStack h="24px">
           <Heading size={'md'}>Blocks</Heading>
-          <Divider borderColor={'gray'} size="10px" orientation="vertical" />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            size="10px"
+            orientation="vertical"
+          />
           <Link
             as={NextLink}
             href={'/'}
@@ -134,29 +138,36 @@ export default function Blocks() {
         <Box
           mt={8}
           bg={useColorModeValue('light-container', 'dark-container')}
-          shadow={'base'}
-          borderRadius={4}
+          backdropFilter="blur(10px)"
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+          borderRadius="xl"
           p={4}
         >
-          <Tabs variant="unstyled">
+          <Tabs variant="soft-rounded" colorScheme="purple">
             <TabList>
-              <Tab
-                _selected={{ color: 'white', bg: 'cyan.400' }}
-                borderRadius={5}
-              >
-                Blocks
-              </Tab>
-              <Tab
-                _selected={{ color: 'white', bg: 'cyan.400' }}
-                borderRadius={5}
-              >
-                Transactions
-              </Tab>
+              <Tab>Blocks</Tab>
+              <Tab>Transactions</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
                 <TableContainer>
-                  <Table variant="simple">
+                  <Table
+                    variant="simple"
+                    sx={{
+                      'tbody tr': {
+                        boxShadow:
+                          'inset 0 -2px 0 0 var(--chakra-colors-gray-800)',
+                      },
+                      'tbody tr td': {
+                        borderBottom: 'none',
+                      },
+                      'tbody tr:last-of-type': {
+                        boxShadow: 'none',
+                      },
+                    }}
+                  >
                     <Thead>
                       <Tr>
                         <Th>Height</Th>
@@ -175,7 +186,12 @@ export default function Blocks() {
                               style={{ textDecoration: 'none' }}
                               _focus={{ boxShadow: 'none' }}
                             >
-                              <Text color={'cyan.400'}>
+                              <Text
+                                color={useColorModeValue(
+                                  'light-theme',
+                                  'dark-theme'
+                                )}
+                              >
                                 {block.header.height}
                               </Text>
                             </Link>
@@ -193,7 +209,21 @@ export default function Blocks() {
               </TabPanel>
               <TabPanel>
                 <TableContainer>
-                  <Table variant="simple">
+                  <Table
+                    variant="simple"
+                    sx={{
+                      'tbody tr': {
+                        boxShadow:
+                          'inset 0 -2px 0 0 var(--chakra-colors-gray-800)',
+                      },
+                      'tbody tr td': {
+                        borderBottom: 'none',
+                      },
+                      'tbody tr:last-of-type': {
+                        boxShadow: 'none',
+                      },
+                    }}
+                  >
                     <Thead>
                       <Tr>
                         <Th>Tx Hash</Th>
@@ -215,7 +245,12 @@ export default function Blocks() {
                               style={{ textDecoration: 'none' }}
                               _focus={{ boxShadow: 'none' }}
                             >
-                              <Text color={'cyan.400'}>
+                              <Text
+                                color={useColorModeValue(
+                                  'light-theme',
+                                  'dark-theme'
+                                )}
+                              >
                                 {trimHash(tx.TxEvent.hash)}
                               </Text>
                             </Link>

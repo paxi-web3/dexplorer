@@ -22,6 +22,7 @@ import {
   SimpleGrid,
   Spinner,
   Tag,
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { useRouter } from 'next/router'
@@ -196,11 +197,17 @@ export default function PRC20Detail() {
     return () => observer.disconnect()
   }, [address, hasMoreHolders, holders.length, isFetchingHolders])
 
+  const themeColor = useColorModeValue('light-theme', 'dark-theme')
+  const panelBg = useColorModeValue('light-container', 'dark-container')
+  const borderColor = useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')
+  const mutedText = useColorModeValue('whiteAlpha.600', 'whiteAlpha.600')
+  const panelShadow = '0 12px 30px rgba(7, 10, 18, 0.55)'
+
   if (isLoading) {
     return (
       <Box textAlign="center" py={20}>
-        <Spinner size="xl" color="#a855f7" />
-        <Text mt={4} color="gray.400">
+        <Spinner size="xl" color={themeColor} />
+        <Text mt={4} color={mutedText}>
           Loading contract details...
         </Text>
       </Box>
@@ -231,7 +238,11 @@ export default function PRC20Detail() {
       <main>
         <HStack h="24px">
           <Heading size={'md'}>PRC-20 Token</Heading>
-          <Divider borderColor={'gray'} size="10px" orientation="vertical" />
+          <Divider
+            borderColor={borderColor}
+            size="10px"
+            orientation="vertical"
+          />
           <Link
             as={NextLink}
             href={'/'}
@@ -240,7 +251,7 @@ export default function PRC20Detail() {
             display="flex"
             justifyContent="center"
           >
-            <Icon fontSize="16" color="#06b6d4" as={FiHome} />
+            <Icon fontSize="16" color={themeColor} as={FiHome} />
           </Link>
           <Icon fontSize="16" as={FiChevronRight} />
           <Link
@@ -249,7 +260,7 @@ export default function PRC20Detail() {
             style={{ textDecoration: 'none' }}
             _focus={{ boxShadow: 'none' }}
           >
-            <Text color="#06b6d4">PRC-20</Text>
+            <Text color={themeColor}>PRC-20</Text>
           </Link>
           <Icon fontSize="16" as={FiChevronRight} />
           <Text>Detail</Text>
@@ -257,10 +268,11 @@ export default function PRC20Detail() {
 
         <Box
           mt={8}
-          bg="rgba(30, 41, 59, 0.4)"
+          bg={panelBg}
           backdropFilter="blur(10px)"
-          border="1px solid rgba(255, 255, 255, 0.08)"
-          shadow={'base'}
+          border="1px solid"
+          borderColor={borderColor}
+          shadow={panelShadow}
           borderRadius="xl"
           p={4}
         >
@@ -276,21 +288,16 @@ export default function PRC20Detail() {
               <HStack spacing={2}>
                 <Heading size="lg">{contract.name}</Heading>
                 {contract.official_verified && (
-                  <Icon as={FiCheckCircle} color="green.500" boxSize={5} />
+                  <Icon as={FiCheckCircle} color="green.400" boxSize={5} />
                 )}
                 {contract.is_pump && <Badge colorScheme="purple">PUMP</Badge>}
               </HStack>
               <HStack spacing={2} mt={1}>
-                <Tag
-                  size="md"
-                  bg="rgba(147, 51, 234, 0.2)"
-                  color="#d8b4fe"
-                  border="1px solid rgba(147, 51, 234, 0.5)"
-                >
+                <Tag size="md" colorScheme="purple">
                   {contract.symbol}
                 </Tag>
                 {contract.minting_disabled && (
-                  <Tag size="sm" bg="rgba(255, 255, 255, 0.1)" color="gray.400">
+                  <Tag size="sm" colorScheme="gray">
                     Minting Disabled
                   </Tag>
                 )}
@@ -298,11 +305,11 @@ export default function PRC20Detail() {
             </Box>
           </HStack>
           {contract.desc && (
-            <Text color="gray.500" mb={4}>
+            <Text color={mutedText} mb={4}>
               {contract.desc}
             </Text>
           )}
-          <Divider borderColor={'rgba(255, 255, 255, 0.08)'} mb={4} />
+          <Divider borderColor={borderColor} mb={4} />
 
           <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4} mb={6}>
             <Stat>
@@ -363,17 +370,18 @@ export default function PRC20Detail() {
 
         <Box
           mt={8}
-          bg="rgba(30, 41, 59, 0.4)"
+          bg={panelBg}
           backdropFilter="blur(10px)"
-          border="1px solid rgba(255, 255, 255, 0.08)"
-          shadow={'base'}
+          border="1px solid"
+          borderColor={borderColor}
+          shadow={panelShadow}
           borderRadius="xl"
           p={4}
         >
           <Heading size={'md'} mb={4}>
             Contract Details
           </Heading>
-          <Divider borderColor={'rgba(255, 255, 255, 0.08)'} mb={4} />
+          <Divider borderColor={borderColor} mb={4} />
           <TableContainer>
             <Table variant="unstyled" size={'sm'}>
               <Tbody>
@@ -388,7 +396,7 @@ export default function PRC20Detail() {
                       style={{ textDecoration: 'none' }}
                       _focus={{ boxShadow: 'none' }}
                     >
-                      <Text color="#06b6d4" wordBreak="break-all">
+                      <Text color={themeColor} wordBreak="break-all">
                         {contract.contract_address}
                       </Text>
                     </Link>
@@ -406,7 +414,7 @@ export default function PRC20Detail() {
                         style={{ textDecoration: 'none' }}
                         _focus={{ boxShadow: 'none' }}
                       >
-                        <Text color="#06b6d4" wordBreak="break-all">
+                        <Text color={themeColor} wordBreak="break-all">
                           {contract.marketing}
                         </Text>
                       </Link>
@@ -419,7 +427,11 @@ export default function PRC20Detail() {
                       <b>Project Website</b>
                     </Td>
                     <Td>
-                      <Link href={contract.project} isExternal color="#06b6d4">
+                      <Link
+                        href={contract.project}
+                        isExternal
+                        color={themeColor}
+                      >
                         {contract.project} <Icon as={FiExternalLink} mx="2px" />
                       </Link>
                     </Td>
@@ -459,17 +471,18 @@ export default function PRC20Detail() {
 
         <Box
           mt={8}
-          bg="rgba(30, 41, 59, 0.4)"
+          bg={panelBg}
           backdropFilter="blur(10px)"
-          border="1px solid rgba(255, 255, 255, 0.08)"
-          shadow={'base'}
+          border="1px solid"
+          borderColor={borderColor}
+          shadow={panelShadow}
           borderRadius="xl"
           p={4}
         >
           <Heading size={'md'} mb={4}>
             Holders
           </Heading>
-          <Divider borderColor={'rgba(255, 255, 255, 0.08)'} mb={4} />
+          <Divider borderColor={borderColor} mb={4} />
           <TableContainer>
             <Table variant="simple" size="sm">
               <Thead>
@@ -492,13 +505,13 @@ export default function PRC20Detail() {
                           style={{ textDecoration: 'none' }}
                           _focus={{ boxShadow: 'none' }}
                         >
-                          <Text color="#06b6d4" isTruncated maxW="300px">
+                          <Text color={themeColor} isTruncated maxW="300px">
                             {holder.address}
                           </Text>
                         </Link>
                         {holder.address ===
                           'paxi1mfru9azs5nua2wxcd4sq64g5nt7nn4n80r745t' && (
-                          <Badge colorScheme="blue" fontSize="xs">
+                          <Badge colorScheme="purple" fontSize="xs">
                             POOL
                           </Badge>
                         )}
@@ -523,9 +536,9 @@ export default function PRC20Detail() {
             </Table>
           </TableContainer>
           <Box ref={holdersLoaderRef} textAlign="center" py={4}>
-            {isFetchingHolders && <Spinner color="#a855f7" />}
+            {isFetchingHolders && <Spinner color={themeColor} />}
             {!hasMoreHolders && holders.length > 0 && (
-              <Text color="gray.500">No more holders to load</Text>
+              <Text color={mutedText}>No more holders to load</Text>
             )}
           </Box>
         </Box>

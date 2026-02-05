@@ -12,7 +12,17 @@ const theme: Theme = extendTheme({
     body: 'Inter, sans-serif',
     mono: 'IBM Plex Mono, monospace',
   },
-  styles: {},
+  styles: {
+    global: {
+      body: {
+        color: 'whiteAlpha.900',
+      },
+      '*::selection': {
+        background: 'light-theme',
+        color: 'black',
+      },
+    },
+  },
   colors,
   components,
 }) as Theme

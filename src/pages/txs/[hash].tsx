@@ -92,7 +92,7 @@ export default function DetailBlock() {
       return (
         <HStack>
           <Text>{fees[0].amount}</Text>
-          <Text textColor="cyan.800">{fees[0].denom}</Text>
+          <Text textColor="whiteAlpha.600">{fees[0].denom}</Text>
         </HStack>
       )
     }
@@ -115,7 +115,9 @@ export default function DetailBlock() {
               style={{ textDecoration: 'none' }}
               _focus={{ boxShadow: 'none' }}
             >
-              <Text color={'cyan.400'}>{msgData}</Text>
+              <Text color={useColorModeValue('light-theme', 'dark-theme')}>
+                {msgData}
+              </Text>
             </Link>
           )
         } else {
@@ -159,7 +161,11 @@ export default function DetailBlock() {
       <main>
         <HStack h="24px">
           <Heading size={'md'}>Transaction</Heading>
-          <Divider borderColor={'gray'} size="10px" orientation="vertical" />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            size="10px"
+            orientation="vertical"
+          />
           <Link
             as={NextLink}
             href={'/'}
@@ -181,7 +187,9 @@ export default function DetailBlock() {
             style={{ textDecoration: 'none' }}
             _focus={{ boxShadow: 'none' }}
           >
-            <Text color={'cyan.400'}>Blocks</Text>
+            <Text color={useColorModeValue('light-theme', 'dark-theme')}>
+              Blocks
+            </Text>
           </Link>
           <Icon fontSize="16" as={FiChevronRight} />
           <Text>Tx</Text>
@@ -189,14 +197,20 @@ export default function DetailBlock() {
         <Box
           mt={8}
           bg={useColorModeValue('light-container', 'dark-container')}
-          shadow={'base'}
-          borderRadius={4}
+          backdropFilter="blur(10px)"
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+          borderRadius="xl"
           p={4}
         >
           <Heading size={'md'} mb={4}>
             Information
           </Heading>
-          <Divider borderColor={'gray'} mb={4} />
+          <Divider
+            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            mb={4}
+          />
           <TableContainer>
             <Table variant="unstyled" size={'sm'}>
               <Tbody>
@@ -241,7 +255,11 @@ export default function DetailBlock() {
                       style={{ textDecoration: 'none' }}
                       _focus={{ boxShadow: 'none' }}
                     >
-                      <Text color={'cyan.400'}>{tx?.height}</Text>
+                      <Text
+                        color={useColorModeValue('light-theme', 'dark-theme')}
+                      >
+                        {tx?.height}
+                      </Text>
                     </Link>
                   </Td>
                 </Tr>
@@ -285,8 +303,11 @@ export default function DetailBlock() {
         <Box
           mt={8}
           bg={useColorModeValue('light-container', 'dark-container')}
-          shadow={'base'}
-          borderRadius={4}
+          backdropFilter="blur(10px)"
+          border="1px solid"
+          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
+          borderRadius="xl"
           p={4}
         >
           <Heading size={'md'} mb={4}>
@@ -294,11 +315,26 @@ export default function DetailBlock() {
           </Heading>
 
           {msgs.map((msg, index) => (
-            <Card variant={'outline'} key={index} mb={8}>
+            <Card
+              variant={'outline'}
+              key={index}
+              mb={8}
+              borderColor={useColorModeValue(
+                'whiteAlpha.200',
+                'whiteAlpha.200'
+              )}
+              bg="rgba(10, 13, 22, 0.55)"
+              shadow="0 8px 20px rgba(7, 10, 18, 0.45)"
+            >
               <CardHeader>
                 <Heading size="sm">{getTypeMsg(msg.typeUrl)}</Heading>
               </CardHeader>
-              <Divider />
+              <Divider
+                borderColor={useColorModeValue(
+                  'whiteAlpha.200',
+                  'whiteAlpha.200'
+                )}
+              />
               <CardBody>
                 <TableContainer>
                   <Table variant="unstyled" size={'sm'}>

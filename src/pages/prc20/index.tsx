@@ -337,7 +337,16 @@ export default function PRC20() {
                               />
                             )}
                             {contract.is_pump && (
-                              <Badge colorScheme="purple" fontSize="xs">
+                              <Badge
+                                bg="linear-gradient(135deg, rgba(179, 133, 247, 0.22) 0%, rgba(147, 51, 234, 0.22) 100%)"
+                                color="whiteAlpha.900"
+                                border="1px solid rgba(179, 133, 247, 0.45)"
+                                boxShadow="0 4px 10px rgba(179, 133, 247, 0.18)"
+                                fontSize="9px"
+                                px={1.5}
+                                py={0.5}
+                                ml={1}
+                              >
                                 PUMP
                               </Badge>
                             )}

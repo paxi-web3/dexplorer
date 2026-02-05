@@ -102,7 +102,9 @@ export default function DetailBlock() {
     if (msgData) {
       if (Array.isArray(msgData)) {
         const data = JSON.stringify(msgData, null, 2)
-        return <CodeBlock language="json" codeString={data}></CodeBlock>
+        return (
+          <CodeBlock language="json" codeString={data} highContrast></CodeBlock>
+        )
       }
 
       if (!Array.isArray(msgData) && msgData.length) {
@@ -338,6 +340,7 @@ export default function DetailBlock() {
               borderColor="rgba(179, 133, 247, 0.12)"
               bg="rgba(10, 13, 22, 0.55)"
               shadow="0 8px 20px rgba(7, 10, 18, 0.45)"
+              color="whiteAlpha.900"
               position="relative"
               overflow="hidden"
               _before={{
@@ -352,7 +355,9 @@ export default function DetailBlock() {
               }}
             >
               <CardHeader>
-                <Heading size="sm">{getTypeMsg(msg.typeUrl)}</Heading>
+                <Heading size="sm" color="white">
+                  {getTypeMsg(msg.typeUrl)}
+                </Heading>
               </CardHeader>
               <Divider borderColor="rgba(179, 133, 247, 0.12)" />
               <CardBody>
@@ -363,7 +368,7 @@ export default function DetailBlock() {
                         <Td pl={0} width={150}>
                           <b>typeUrl</b>
                         </Td>
-                        <Td>{msg.typeUrl}</Td>
+                        <Td color="whiteAlpha.900">{msg.typeUrl}</Td>
                       </Tr>
                       {Object.keys(msg.data ?? {}).map((key) => (
                         <Tr key={key}>

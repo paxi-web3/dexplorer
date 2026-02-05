@@ -302,7 +302,20 @@ export default function PRC20Detail() {
                 {contract.official_verified && (
                   <Icon as={FiCheckCircle} color="green.400" boxSize={5} />
                 )}
-                {contract.is_pump && <Badge colorScheme="purple">PUMP</Badge>}
+                {contract.is_pump && (
+                  <Badge
+                    bg="linear-gradient(135deg, rgba(179, 133, 247, 0.22) 0%, rgba(147, 51, 234, 0.22) 100%)"
+                    color="whiteAlpha.900"
+                    border="1px solid rgba(179, 133, 247, 0.45)"
+                    boxShadow="0 4px 10px rgba(179, 133, 247, 0.18)"
+                    fontSize="9px"
+                    px={1.5}
+                    py={0.5}
+                    ml={1}
+                  >
+                    PUMP
+                  </Badge>
+                )}
               </HStack>
               <HStack spacing={2} mt={1}>
                 <Tag
@@ -540,10 +553,14 @@ export default function PRC20Detail() {
                         {holder.address ===
                           'paxi1mfru9azs5nua2wxcd4sq64g5nt7nn4n80r745t' && (
                           <Badge
-                            bg="rgba(179, 133, 247, 0.14)"
-                            color="#b385f7"
-                            border="1px solid rgba(179, 133, 247, 0.4)"
-                            fontSize="xs"
+                            bg="linear-gradient(135deg, rgba(179, 133, 247, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%)"
+                            color="whiteAlpha.900"
+                            border="1px solid rgba(179, 133, 247, 0.45)"
+                            boxShadow="0 4px 10px rgba(179, 133, 247, 0.16)"
+                            fontSize="9px"
+                            px={1.5}
+                            py={0.5}
+                            ml={1}
                           >
                             POOL
                           </Badge>

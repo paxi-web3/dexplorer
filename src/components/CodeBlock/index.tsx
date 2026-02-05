@@ -12,9 +12,11 @@ const SyntaxHighlighter = dynamic(
 const CodeBlock = ({
   language,
   codeString,
+  highContrast,
 }: {
   language: string
   codeString: string
+  highContrast?: boolean
 }) => {
   const { colorMode } = useColorMode()
   return (
@@ -28,6 +30,15 @@ const CodeBlock = ({
       boxShadow="0 10px 24px rgba(7, 10, 18, 0.55)"
       overflowX="auto"
       position="relative"
+      sx={
+        highContrast
+          ? {
+              'code, code span': {
+                filter: 'brightness(1.25)',
+              },
+            }
+          : undefined
+      }
       _before={{
         content: '""',
         position: 'absolute',
@@ -42,7 +53,19 @@ const CodeBlock = ({
       <SyntaxHighlighter
         language={language}
         style={colorMode === 'dark' ? atomOneDark : atomOneLight}
-        customStyle={{ background: 'none' }}
+        customStyle={{
+          background: 'none',
+          color: highContrast ? '#f8fafc' : undefined,
+        }}
+        codeTagProps={
+          highContrast
+            ? {
+                style: {
+                  color: '#f8fafc',
+                },
+              }
+            : undefined
+        }
       >
         {codeString}
       </SyntaxHighlighter>

@@ -332,17 +332,31 @@ export default function DetailAccount() {
   }
 
   const renderMessages = (messages: any) => {
+    const messageBadgeProps = {
+      bg: 'linear-gradient(135deg, rgba(179, 133, 247, 0.22) 0%, rgba(147, 51, 234, 0.22) 100%)',
+      color: 'whiteAlpha.900',
+      border: '1px solid rgba(179, 133, 247, 0.45)',
+      boxShadow: '0 4px 10px rgba(179, 133, 247, 0.18)',
+      fontSize: '9px',
+      px: 1.5,
+      py: 0.5,
+    } as const
+
     if (messages.length == 1) {
       return (
         <HStack>
-          <Tag colorScheme="purple">{getTypeMsg(messages[0].typeUrl)}</Tag>
+          <Badge {...messageBadgeProps}>
+            {getTypeMsg(messages[0].typeUrl)}
+          </Badge>
         </HStack>
       )
     } else if (messages.length > 1) {
       return (
         <HStack>
-          <Tag colorScheme="purple">{getTypeMsg(messages[0].typeUrl)}</Tag>
-          <Text textColor="whiteAlpha.700">+{messages.length - 1}</Text>
+          <Badge {...messageBadgeProps}>
+            {getTypeMsg(messages[0].typeUrl)}
+          </Badge>
+          <Badge {...messageBadgeProps}>+{messages.length - 1}</Badge>
         </HStack>
       )
     }
@@ -624,7 +638,16 @@ export default function DetailAccount() {
                               />
                             )}
                             {asset.contract.is_pump && (
-                              <Badge colorScheme="purple" fontSize="xs">
+                              <Badge
+                                bg="linear-gradient(135deg, rgba(179, 133, 247, 0.22) 0%, rgba(147, 51, 234, 0.22) 100%)"
+                                color="whiteAlpha.900"
+                                border="1px solid rgba(179, 133, 247, 0.45)"
+                                boxShadow="0 4px 10px rgba(179, 133, 247, 0.18)"
+                                fontSize="9px"
+                                px={1.5}
+                                py={0.5}
+                                ml={1}
+                              >
                                 PUMP
                               </Badge>
                             )}

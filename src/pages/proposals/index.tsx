@@ -32,6 +32,16 @@ type Proposal = {
 
 const columnHelper = createColumnHelper<Proposal>()
 
+const mutedBadgeProps = {
+  bg: 'linear-gradient(135deg, rgba(179, 133, 247, 0.22) 0%, rgba(147, 51, 234, 0.22) 100%)',
+  color: 'whiteAlpha.900',
+  border: '1px solid rgba(179, 133, 247, 0.45)',
+  boxShadow: '0 4px 10px rgba(179, 133, 247, 0.18)',
+  fontSize: '9px',
+  px: 1.5,
+  py: 0.5,
+} as const
+
 const columns = [
   columnHelper.accessor('id', {
     cell: (info) => `#${info.getValue()}`,
@@ -42,7 +52,7 @@ const columns = [
     header: 'Title',
   }),
   columnHelper.accessor('types', {
-    cell: (info) => <Tag colorScheme="purple">{info.getValue()}</Tag>,
+    cell: (info) => <Badge {...mutedBadgeProps}>{info.getValue()}</Badge>,
     header: 'Types',
   }),
   columnHelper.accessor('status', {
@@ -51,7 +61,7 @@ const columns = [
       if (!value) {
         return ''
       }
-      return <Badge colorScheme={value.color}>{value.status}</Badge>
+      return <Badge {...mutedBadgeProps}>{value.status}</Badge>
     },
     header: 'Status',
   }),

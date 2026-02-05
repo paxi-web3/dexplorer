@@ -92,7 +92,7 @@ export default function DataTable<Data extends object>({
 
   return (
     <>
-      <Table>
+      <Table variant="unstyled">
         <Thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <Tr key={headerGroup.id}>

@@ -108,7 +108,7 @@ export default function Home() {
           <Text>Home</Text>
         </HStack>
         <Box mt={8}>
-          <SimpleGrid minChildWidth="200px" spacing="40px">
+          <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing="24px">
             <Skeleton isLoaded={isLoaded}>
               <BoxInfo
                 colorScheme="accent1"

@@ -24,7 +24,6 @@ import {
   Flex,
   Stack,
   FormControl,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import {
   FiRadio,
@@ -200,60 +199,85 @@ export default function Navbar() {
     setRPCList(getRPCList())
   }
 
-  const navbarBg = useColorModeValue(
-    'rgba(12, 16, 28, 0.78)',
-    'rgba(12, 16, 28, 0.78)'
-  )
-  const borderColor = useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')
-  const themeColor = useColorModeValue('light-theme', 'dark-theme')
-
   return (
     <>
       <Box
-        bg={navbarBg}
-        backdropFilter="blur(10px)"
+        position="relative"
+        overflow="hidden"
+        bg="rgba(12, 15, 25, 0.85)"
+        backdropFilter="blur(12px)"
         border="1px solid"
-        borderColor={borderColor}
+        borderColor="rgba(179, 133, 247, 0.12)"
         w="100%"
         p={4}
-        shadow={'base'}
-        borderRadius="xl"
+        borderRadius="14px"
         marginBottom={4}
         display={'flex'}
         justifyContent={'space-between'}
+        transition="all 0.3s ease"
+        _hover={{
+          borderColor: 'rgba(179, 133, 247, 0.2)',
+        }}
+        _before={{
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '1px',
+          background:
+            'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.3), transparent)',
+        }}
       >
-        <HStack>
-          <Icon mr="4" fontSize="32" color={themeColor} as={FiRadio} />
+        <HStack spacing={4}>
+          <Flex
+            align="center"
+            justify="center"
+            w="40px"
+            h="40px"
+            borderRadius="10px"
+            bg="rgba(179, 133, 247, 0.1)"
+            border="1px solid"
+            borderColor="rgba(179, 133, 247, 0.2)"
+          >
+            <Icon fontSize="20" color="#b385f7" as={FiRadio} />
+          </Flex>
           <Flex
             flexDirection="row"
-            gap="4"
+            gap="3"
+            align="center"
             border="1px"
-            borderColor={borderColor}
-            borderRadius="xl"
+            borderColor="rgba(179, 133, 247, 0.12)"
+            borderRadius="10px"
             p={3}
-            bg="rgba(10, 13, 22, 0.35)"
+            bg="rgba(10, 13, 22, 0.5)"
           >
             <Box>
-              <Skeleton isLoaded={isLoadedSkeleton}>
-                <Heading size="xs">
+              <Skeleton isLoaded={isLoadedSkeleton} borderRadius="6px">
+                <Heading size="xs" fontWeight="600" color="whiteAlpha.900">
                   {newBlock?.header.chainId
                     ? newBlock?.header.chainId
                     : status?.nodeInfo.network}
                 </Heading>
               </Skeleton>
-              <Skeleton isLoaded={isLoadedSkeleton}>
-                <Text fontSize="sm" color="whiteAlpha.600">
+              <Skeleton isLoaded={isLoadedSkeleton} mt={1} borderRadius="6px">
+                <Text fontSize="xs" color="whiteAlpha.500" fontFamily="mono">
                   {address}
                 </Text>
               </Skeleton>
             </Box>
             <IconButton
-              variant="solid"
+              variant="ghost"
               aria-label="Change RPC"
-              size="md"
-              fontSize="20"
+              size="sm"
+              fontSize="16"
               icon={<FiRefreshCcw />}
               onClick={onChangeRPC}
+              color="whiteAlpha.700"
+              _hover={{
+                bg: 'rgba(179, 133, 247, 0.1)',
+                color: '#b385f7',
+              }}
             />
           </Flex>
         </HStack>
@@ -266,24 +290,35 @@ export default function Navbar() {
             icon={<FiSearch />}
             onClick={onOpen}
             display={{ base: 'none', md: 'flex' }}
+            color="whiteAlpha.700"
+            _hover={{
+              bg: 'rgba(179, 133, 247, 0.1)',
+              color: '#b385f7',
+            }}
           />
         </HStack>
       </Box>
+
+      {/* Search Modal */}
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
+        <ModalOverlay bg="rgba(5, 8, 16, 0.85)" backdropFilter="blur(8px)" />
         <ModalContent
-          bg={useColorModeValue('light-container', 'dark-container')}
+          bg="rgba(12, 15, 25, 0.95)"
+          border="1px solid"
+          borderColor="rgba(179, 133, 247, 0.15)"
+          boxShadow="0 4px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(179, 133, 247, 0.15)"
         >
-          <ModalHeader>Search</ModalHeader>
+          <ModalHeader fontWeight="600">Search</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Input
-              width={400}
+              width="100%"
               type={'text'}
-              borderColor={borderColor}
+              borderColor="rgba(179, 133, 247, 0.2)"
               _focus={{
-                borderColor: themeColor,
-                boxShadow: `0 0 0 1px ${themeColor}`,
+                borderColor: '#b385f7',
+                boxShadow:
+                  '0 0 0 1px rgba(179, 133, 247, 0.3), 0 0 16px rgba(179, 133, 247, 0.15)',
               }}
               placeholder="Height/Transaction/Account Address"
               onChange={handleInputSearch}
@@ -291,28 +326,23 @@ export default function Navbar() {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              bg={themeColor}
-              _hover={{
-                bg: useColorModeValue('purple.500', 'purple.500'),
-              }}
-              color="white"
-              w="full"
-              textTransform="uppercase"
-              onClick={handleSearch}
-            >
+            <Button w="full" onClick={handleSearch}>
               Confirm
             </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
 
+      {/* Change RPC Modal */}
       <Modal isOpen={isOpenRPCs} onClose={onCloseRPCs}>
-        <ModalOverlay />
+        <ModalOverlay bg="rgba(5, 8, 16, 0.85)" backdropFilter="blur(8px)" />
         <ModalContent
-          bg={useColorModeValue('light-container', 'dark-container')}
+          bg="rgba(12, 15, 25, 0.95)"
+          border="1px solid"
+          borderColor="rgba(179, 133, 247, 0.15)"
+          boxShadow="0 4px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(179, 133, 247, 0.15)"
         >
-          <ModalHeader>Change Connection</ModalHeader>
+          <ModalHeader fontWeight="600">Change Connection</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Stack
@@ -323,16 +353,17 @@ export default function Navbar() {
             >
               <FormControl>
                 <Input
-                  variant={'solid'}
+                  variant={'outline'}
                   borderWidth={1}
-                  color={useColorModeValue('gray.800', 'white')}
+                  color="whiteAlpha.900"
                   _placeholder={{
-                    color: 'gray.400',
+                    color: 'whiteAlpha.400',
                   }}
-                  borderColor={borderColor}
+                  borderColor="rgba(179, 133, 247, 0.2)"
                   _focus={{
-                    borderColor: themeColor,
-                    boxShadow: `0 0 0 1px ${themeColor}`,
+                    borderColor: '#b385f7',
+                    boxShadow:
+                      '0 0 0 1px rgba(179, 133, 247, 0.3), 0 0 16px rgba(179, 133, 247, 0.15)',
                   }}
                   id={'newAddress'}
                   type={'url'}
@@ -348,14 +379,6 @@ export default function Navbar() {
               </FormControl>
               <FormControl w={{ base: '100%', md: '40%' }}>
                 <Button
-                  backgroundColor={themeColor}
-                  color={'white'}
-                  _hover={{
-                    backgroundColor: useColorModeValue(
-                      'purple.500',
-                      'purple.500'
-                    ),
-                  }}
                   isLoading={state === 'submitting'}
                   w="100%"
                   type={state === 'success' ? 'button' : 'submit'}
@@ -365,80 +388,97 @@ export default function Navbar() {
               </FormControl>
             </Stack>
             <Text
+              mt={2}
               textAlign={'center'}
-              color={error ? 'red.500' : 'whiteAlpha.600'}
+              fontSize="sm"
+              color={error ? 'red.400' : 'whiteAlpha.500'}
             >
-              {error ? 'Oh no, cannot connect to websocket client! 😢' : '‎'}
+              {error ? 'Cannot connect to websocket client' : ''}
             </Text>
             <Text
-              m={2}
+              mt={4}
+              mb={2}
               textAlign={'center'}
-              fontWeight="semibold"
-              color={useColorModeValue('whiteAlpha.600', 'whiteAlpha.600')}
+              fontSize="11px"
+              fontWeight="600"
+              textTransform="uppercase"
+              letterSpacing="0.08em"
+              color="whiteAlpha.500"
             >
               Available RPCs
             </Text>
-            <Stack spacing={4} mb="4">
+            <Stack spacing={2} mb="4">
               {rpcList.map((rpc) => (
                 <Flex
                   w="full"
                   border="1px"
-                  borderRadius="md"
-                  borderColor={borderColor}
-                  p={2}
+                  borderRadius="10px"
+                  borderColor="rgba(179, 133, 247, 0.12)"
+                  bg="rgba(10, 13, 22, 0.5)"
+                  p={3}
                   justifyContent="space-between"
                   alignItems="center"
                   key={rpc}
+                  transition="all 0.2s ease"
                   _hover={{
-                    bg: useColorModeValue(
-                      'rgba(179, 133, 247, 0.08)',
-                      'rgba(179, 133, 247, 0.08)'
-                    ),
+                    bg: 'rgba(179, 133, 247, 0.06)',
+                    borderColor: 'rgba(179, 133, 247, 0.2)',
                   }}
                 >
                   <Box>
-                    <Text fontSize="sm" wordBreak="break-all">
+                    <Text
+                      fontSize="sm"
+                      wordBreak="break-all"
+                      color="whiteAlpha.800"
+                    >
                       {rpc}
                     </Text>
                   </Box>
                   {rpc !== address ? (
-                    <Stack direction="row">
+                    <Stack direction="row" spacing={2}>
                       <IconButton
                         onClick={() => selectChain(rpc)}
-                        backgroundColor={themeColor}
-                        color={'white'}
-                        _hover={{
-                          backgroundColor: useColorModeValue(
-                            'purple.500',
-                            'purple.300'
-                          ),
-                        }}
                         aria-label="Connect RPC"
                         size="sm"
-                        fontSize="20"
+                        fontSize="16"
                         icon={<FiZap />}
                       />
                       <IconButton
                         onClick={() => removeChain(rpc)}
-                        backgroundColor={'red.400'}
-                        color={'white'}
+                        bg="rgba(239, 68, 68, 0.15)"
+                        color="#ef4444"
+                        borderWidth="1px"
+                        borderColor="rgba(239, 68, 68, 0.3)"
                         _hover={{
-                          backgroundColor: 'red.500',
+                          bg: 'rgba(239, 68, 68, 0.25)',
+                          borderColor: 'rgba(239, 68, 68, 0.5)',
                         }}
                         aria-label="Remove RPC"
                         size="sm"
-                        fontSize="20"
+                        fontSize="16"
                         icon={<FiTrash2 />}
                       />
                     </Stack>
                   ) : (
-                    <Text
-                      fontSize="sm"
-                      fontWeight="semibold"
-                      color={themeColor}
+                    <Flex
+                      align="center"
+                      px={3}
+                      py={1}
+                      borderRadius="6px"
+                      bg="rgba(179, 133, 247, 0.15)"
+                      border="1px solid"
+                      borderColor="rgba(179, 133, 247, 0.3)"
                     >
-                      Connected
-                    </Text>
+                      <Text
+                        fontSize="xs"
+                        fontWeight="600"
+                        color="#b385f7"
+                        textTransform="uppercase"
+                        letterSpacing="0.04em"
+                      >
+                        Connected
+                      </Text>
+                    </Flex>
                   )}
                 </Flex>
               ))}

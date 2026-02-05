@@ -14,7 +14,6 @@ import {
   Th,
   Thead,
   Tr,
-  useColorModeValue,
   useToast,
 } from '@chakra-ui/react'
 import { FiChevronRight, FiHome } from 'react-icons/fi'
@@ -68,13 +67,25 @@ export default function DetailBlock() {
     if (messages.length == 1) {
       return (
         <HStack>
-          <Tag colorScheme="purple">{getTypeMsg(messages[0].typeUrl)}</Tag>
+          <Tag
+            bg="rgba(179, 133, 247, 0.15)"
+            color="#b385f7"
+            border="1px solid rgba(179, 133, 247, 0.3)"
+          >
+            {getTypeMsg(messages[0].typeUrl)}
+          </Tag>
         </HStack>
       )
     } else if (messages.length > 1) {
       return (
         <HStack>
-          <Tag colorScheme="purple">{getTypeMsg(messages[0].typeUrl)}</Tag>
+          <Tag
+            bg="rgba(179, 133, 247, 0.15)"
+            color="#b385f7"
+            border="1px solid rgba(179, 133, 247, 0.3)"
+          >
+            {getTypeMsg(messages[0].typeUrl)}
+          </Tag>
           <Text textColor="whiteAlpha.700">+{messages.length - 1}</Text>
         </HStack>
       )
@@ -128,7 +139,7 @@ export default function DetailBlock() {
         <HStack h="24px">
           <Heading size={'md'}>Block</Heading>
           <Divider
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            borderColor="rgba(179, 133, 247, 0.2)"
             size="10px"
             orientation="vertical"
           />
@@ -140,43 +151,46 @@ export default function DetailBlock() {
             display="flex"
             justifyContent="center"
           >
-            <Icon
-              fontSize="16"
-              color={useColorModeValue('light-theme', 'dark-theme')}
-              as={FiHome}
-            />
+            <Icon fontSize="16" color="#b385f7" as={FiHome} />
           </Link>
-          <Icon fontSize="16" as={FiChevronRight} />
+          <Icon fontSize="16" color="whiteAlpha.400" as={FiChevronRight} />
           <Link
             as={NextLink}
             href={'/blocks'}
             style={{ textDecoration: 'none' }}
             _focus={{ boxShadow: 'none' }}
           >
-            <Text color={useColorModeValue('light-theme', 'dark-theme')}>
-              Blocks
-            </Text>
+            <Text color="#b385f7">Blocks</Text>
           </Link>
-          <Icon fontSize="16" as={FiChevronRight} />
-          <Text>Block #{height}</Text>
+          <Icon fontSize="16" color="whiteAlpha.400" as={FiChevronRight} />
+          <Text color="whiteAlpha.600">Block #{height}</Text>
         </HStack>
         <Box
           mt={8}
-          bg={useColorModeValue('light-container', 'dark-container')}
+          bg="rgba(12, 15, 25, 0.85)"
           backdropFilter="blur(10px)"
           border="1px solid"
-          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          borderColor="rgba(179, 133, 247, 0.12)"
           shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
           borderRadius="xl"
           p={4}
+          position="relative"
+          overflow="hidden"
+          _before={{
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '1px',
+            background:
+              'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.3), transparent)',
+          }}
         >
           <Heading size={'md'} mb={4}>
             Header
           </Heading>
-          <Divider
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
-            mb={4}
-          />
+          <Divider borderColor="rgba(179, 133, 247, 0.2)" mb={4} />
           <TableContainer>
             <Table variant="unstyled" size={'sm'}>
               <Tbody>
@@ -223,27 +237,36 @@ export default function DetailBlock() {
 
         <Box
           mt={8}
-          bg={useColorModeValue('light-container', 'dark-container')}
+          bg="rgba(12, 15, 25, 0.85)"
           backdropFilter="blur(10px)"
           border="1px solid"
-          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          borderColor="rgba(179, 133, 247, 0.12)"
           shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
           borderRadius="xl"
           p={4}
+          position="relative"
+          overflow="hidden"
+          _before={{
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '1px',
+            background:
+              'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.3), transparent)',
+          }}
         >
           <Heading size={'md'} mb={4}>
             Transactions
           </Heading>
-          <Divider
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
-            mb={4}
-          />
+          <Divider borderColor="rgba(179, 133, 247, 0.2)" mb={4} />
           <TableContainer>
             <Table
               variant="simple"
               sx={{
                 'tbody tr': {
-                  boxShadow: 'inset 0 -2px 0 0 var(--chakra-colors-gray-800)',
+                  boxShadow: 'inset 0 -1px 0 0 var(--chakra-colors-gray-800)',
                 },
                 'tbody tr td': {
                   borderBottom: 'none',
@@ -272,11 +295,7 @@ export default function DetailBlock() {
                         style={{ textDecoration: 'none' }}
                         _focus={{ boxShadow: 'none' }}
                       >
-                        <Text
-                          color={useColorModeValue('light-theme', 'dark-theme')}
-                        >
-                          {trimHash(tx.hash)}
-                        </Text>
+                        <Text color="#b385f7">{trimHash(tx.hash)}</Text>
                       </Link>
                     </Td>
                     <Td>{renderMessages(tx.data.body?.messages)}</Td>

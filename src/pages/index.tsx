@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import {
   useColorModeValue,
-  FlexProps,
   Heading,
   Divider,
   HStack,
@@ -12,6 +11,7 @@ import {
   Box,
   VStack,
   Skeleton,
+  Flex,
 } from '@chakra-ui/react'
 import {
   FiHome,
@@ -89,7 +89,11 @@ export default function Home() {
       <main>
         <HStack h="24px">
           <Heading size={'md'}>Home</Heading>
-          <Divider borderColor="gray.600" size="1px" orientation="vertical" />
+          <Divider
+            borderColor="rgba(179, 133, 247, 0.2)"
+            size="1px"
+            orientation="vertical"
+          />
           <Link
             as={NextLink}
             href={'/'}
@@ -104,28 +108,27 @@ export default function Home() {
               as={FiHome}
             />
           </Link>
-          <Icon fontSize="16" as={FiChevronRight} />
-          <Text>Home</Text>
+          <Icon fontSize="16" as={FiChevronRight} color="whiteAlpha.400" />
+          <Text color="whiteAlpha.600">Home</Text>
         </HStack>
         <Box mt={8}>
-          <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing="24px">
-            <Skeleton isLoaded={isLoaded}>
-              <BoxInfo
-                colorScheme="accent1"
+          <SimpleGrid columns={{ base: 1, sm: 2, lg: 3 }} spacing="20px">
+            <Skeleton isLoaded={isLoaded} borderRadius="16px">
+              <StatCard
                 icon={FiBox}
-                name="Latest Block Height"
+                label="Latest Block Height"
                 value={
                   newBlock?.header.height
-                    ? newBlock?.header.height
-                    : status?.syncInfo.latestBlockHeight
+                    ? newBlock?.header.height.toString()
+                    : status?.syncInfo.latestBlockHeight?.toString() || '-'
                 }
+                accentColor="#b385f7"
               />
             </Skeleton>
-            <Skeleton isLoaded={isLoaded}>
-              <BoxInfo
-                colorScheme="accent2"
+            <Skeleton isLoaded={isLoaded} borderRadius="16px">
+              <StatCard
                 icon={FiClock}
-                name="Latest Block Time"
+                label="Latest Block Time"
                 value={
                   newBlock?.header.time
                     ? displayDate(newBlock?.header.time?.toISOString())
@@ -133,38 +136,38 @@ export default function Home() {
                     ? displayDate(
                         status?.syncInfo.latestBlockTime.toISOString()
                       )
-                    : ''
+                    : '-'
                 }
+                accentColor="#a78bfa"
               />
             </Skeleton>
 
-            <Skeleton isLoaded={isLoaded}>
-              <BoxInfo
-                colorScheme="accent3"
+            <Skeleton isLoaded={isLoaded} borderRadius="16px">
+              <StatCard
                 icon={FiCpu}
-                name="Network"
+                label="Network"
                 value={
                   newBlock?.header.chainId
                     ? newBlock?.header.chainId
-                    : status?.nodeInfo.network
+                    : status?.nodeInfo.network || '-'
                 }
+                accentColor="#f472b6"
               />
             </Skeleton>
 
-            <Skeleton isLoaded={isLoaded}>
-              <BoxInfo
-                colorScheme="accent4"
+            <Skeleton isLoaded={isLoaded} borderRadius="16px">
+              <StatCard
                 icon={FiUsers}
-                name="Validators"
-                value={validators}
+                label="Validators"
+                value={validators?.toString() || '-'}
+                accentColor="#38bdf8"
               />
             </Skeleton>
 
-            <Skeleton isLoaded={isLoaded}>
-              <BoxInfo
-                colorScheme="accent5"
+            <Skeleton isLoaded={isLoaded} borderRadius="16px">
+              <StatCard
                 icon={FiDollarSign}
-                name="Circulating Supply"
+                label="Circulating Supply"
                 value={
                   circulatingSupply?.amount
                     ? Math.ceil(
@@ -172,14 +175,14 @@ export default function Home() {
                       ).toLocaleString() + ' PAXI'
                     : 'N/A'
                 }
+                accentColor="#2dd4bf"
               />
             </Skeleton>
 
-            <Skeleton isLoaded={isLoaded}>
-              <BoxInfo
-                colorScheme="accent6"
+            <Skeleton isLoaded={isLoaded} borderRadius="16px">
+              <StatCard
                 icon={FiLock}
-                name="Locked Vesting"
+                label="Locked Vesting"
                 value={
                   lockedVesting?.amount
                     ? Math.ceil(
@@ -187,6 +190,7 @@ export default function Home() {
                       ).toLocaleString() + ' PAXI'
                     : 'N/A'
                 }
+                accentColor="#34d399"
               />
             </Skeleton>
           </SimpleGrid>
@@ -196,43 +200,88 @@ export default function Home() {
   )
 }
 
-interface BoxInfoProps extends FlexProps {
-  colorScheme: string
+interface StatCardProps {
   icon: IconType
-  name: string
-  value: string | number | undefined
+  label: string
+  value: string
+  accentColor: string
 }
-const BoxInfo = ({ colorScheme, icon, name, value, ...rest }: BoxInfoProps) => {
-  const bgColor = useColorModeValue(`${colorScheme}.100`, `${colorScheme}.600`)
-  const color = useColorModeValue(`${colorScheme}.600`, `${colorScheme}.100`)
+
+const StatCard = ({ icon, label, value, accentColor }: StatCardProps) => {
   return (
-    <VStack
-      bg={useColorModeValue('light-container', 'dark-container')}
-      backdropFilter="blur(10px)"
+    <Box
+      position="relative"
+      overflow="hidden"
+      bg="rgba(12, 15, 25, 0.85)"
+      backdropFilter="blur(12px)"
       border="1px solid"
-      borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
-      shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
-      borderRadius="xl"
-      p={4}
-      height="150px"
+      borderColor="rgba(179, 133, 247, 0.12)"
+      borderRadius="16px"
+      p={5}
+      minH="140px"
+      transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+      _hover={{
+        borderColor: 'rgba(179, 133, 247, 0.3)',
+        transform: 'translateY(-2px)',
+        boxShadow: `0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(179, 133, 247, 0.15), 0 0 24px ${accentColor}20`,
+      }}
+      _before={{
+        content: '""',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: '1px',
+        background: `linear-gradient(90deg, transparent, ${accentColor}40, transparent)`,
+      }}
     >
       <Box
-        backgroundColor={bgColor}
-        padding={2}
-        height="40px"
-        width="40px"
-        borderRadius={'full'}
-        display={'flex'}
-        justifyContent={'center'}
-        alignItems={'center'}
-        mb={2}
-      >
-        <Icon fontSize="20" color={color} as={icon} />
-      </Box>
-      <Heading size={'md'}>{value}</Heading>
-      <Text size={'sm'} color="whiteAlpha.700">
-        {name}
-      </Text>
-    </VStack>
+        position="absolute"
+        top="-30%"
+        right="-10%"
+        width="120px"
+        height="120px"
+        background={`radial-gradient(circle, ${accentColor}15 0%, transparent 70%)`}
+        borderRadius="full"
+        filter="blur(20px)"
+        pointerEvents="none"
+      />
+
+      <VStack align="flex-start" spacing={3} position="relative">
+        <Flex
+          align="center"
+          justify="center"
+          w="42px"
+          h="42px"
+          borderRadius="10px"
+          bg={`${accentColor}15`}
+          border="1px solid"
+          borderColor={`${accentColor}30`}
+        >
+          <Icon as={icon} fontSize="20px" color={accentColor} />
+        </Flex>
+
+        <Box>
+          <Text
+            fontSize="11px"
+            fontWeight="600"
+            color="whiteAlpha.500"
+            textTransform="uppercase"
+            letterSpacing="0.08em"
+            mb={1}
+          >
+            {label}
+          </Text>
+          <Heading
+            size="md"
+            fontWeight="700"
+            color="whiteAlpha.900"
+            letterSpacing="-0.01em"
+          >
+            {value}
+          </Heading>
+        </Box>
+      </VStack>
+    </Box>
   )
 }

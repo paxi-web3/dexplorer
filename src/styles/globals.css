@@ -11,21 +11,22 @@ a {
 }
 
 body {
-  background-color: #070a12;
+  background-color: #050810;
   background-image: radial-gradient(
-      1200px 800px at 70% 10%,
-      rgba(179, 133, 247, 0.16),
-      transparent 60%
+      ellipse 80% 50% at 50% -20%,
+      rgba(179, 133, 247, 0.2),
+      transparent
     ),
     radial-gradient(
-      900px 600px at 15% 90%,
-      rgba(56, 189, 248, 0.1),
-      transparent 55%
+      ellipse 60% 40% at 100% 100%,
+      rgba(139, 92, 246, 0.12),
+      transparent
     ),
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: auto, auto, 64px 64px, 64px 64px;
-  background-position: center;
+    radial-gradient(
+      ellipse 50% 30% at 0% 80%,
+      rgba(56, 189, 248, 0.08),
+      transparent
+    );
   background-attachment: fixed;
 }
 
@@ -35,22 +36,89 @@ body::before {
   inset: 0;
   pointer-events: none;
   background: linear-gradient(
-      180deg,
-      rgba(10, 13, 22, 0) 0%,
-      rgba(10, 13, 22, 0.65) 100%
-    ),
-    radial-gradient(
-      600px 400px at 85% 15%,
-      rgba(179, 133, 247, 0.25),
-      transparent 70%
-    );
-  mix-blend-mode: screen;
+    180deg,
+    rgba(5, 8, 16, 0) 0%,
+    rgba(5, 8, 16, 0.4) 50%,
+    rgba(5, 8, 16, 0.8) 100%
+  );
   z-index: 0;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(
+      rgba(179, 133, 247, 0.03) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(179, 133, 247, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 30%,
+    black 20%,
+    transparent 70%
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 30%,
+    black 20%,
+    transparent 70%
+  );
+  z-index: 0;
+  opacity: 0.6;
 }
 
 #__next {
   position: relative;
   z-index: 1;
+}
+
+@keyframes pulse-glow {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(10, 13, 22, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(179, 133, 247, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(179, 133, 247, 0.5);
 }
 
 @media (prefers-color-scheme: dark) {

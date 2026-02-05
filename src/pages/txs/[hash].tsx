@@ -17,7 +17,6 @@ import {
   Td,
   Text,
   Tr,
-  useColorModeValue,
   useToast,
 } from '@chakra-ui/react'
 import { FiChevronRight, FiHome, FiCheck, FiX } from 'react-icons/fi'
@@ -115,9 +114,7 @@ export default function DetailBlock() {
               style={{ textDecoration: 'none' }}
               _focus={{ boxShadow: 'none' }}
             >
-              <Text color={useColorModeValue('light-theme', 'dark-theme')}>
-                {msgData}
-              </Text>
+              <Text color="#b385f7">{msgData}</Text>
             </Link>
           )
         } else {
@@ -162,7 +159,7 @@ export default function DetailBlock() {
         <HStack h="24px">
           <Heading size={'md'}>Transaction</Heading>
           <Divider
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            borderColor="rgba(179, 133, 247, 0.2)"
             size="10px"
             orientation="vertical"
           />
@@ -174,43 +171,46 @@ export default function DetailBlock() {
             display="flex"
             justifyContent="center"
           >
-            <Icon
-              fontSize="16"
-              color={useColorModeValue('light-theme', 'dark-theme')}
-              as={FiHome}
-            />
+            <Icon fontSize="16" color="#b385f7" as={FiHome} />
           </Link>
-          <Icon fontSize="16" as={FiChevronRight} />
+          <Icon fontSize="16" as={FiChevronRight} color="whiteAlpha.400" />
           <Link
             as={NextLink}
             href={'/blocks'}
             style={{ textDecoration: 'none' }}
             _focus={{ boxShadow: 'none' }}
           >
-            <Text color={useColorModeValue('light-theme', 'dark-theme')}>
-              Blocks
-            </Text>
+            <Text color="whiteAlpha.600">Blocks</Text>
           </Link>
-          <Icon fontSize="16" as={FiChevronRight} />
-          <Text>Tx</Text>
+          <Icon fontSize="16" as={FiChevronRight} color="whiteAlpha.400" />
+          <Text color="whiteAlpha.600">Tx</Text>
         </HStack>
         <Box
           mt={8}
-          bg={useColorModeValue('light-container', 'dark-container')}
+          bg="rgba(12, 15, 25, 0.85)"
           backdropFilter="blur(10px)"
           border="1px solid"
-          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          borderColor="rgba(179, 133, 247, 0.12)"
           shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
           borderRadius="xl"
           p={4}
+          position="relative"
+          overflow="hidden"
+          _before={{
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '1px',
+            background:
+              'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.3), transparent)',
+          }}
         >
           <Heading size={'md'} mb={4}>
             Information
           </Heading>
-          <Divider
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
-            mb={4}
-          />
+          <Divider borderColor="rgba(179, 133, 247, 0.12)" mb={4} />
           <TableContainer>
             <Table variant="unstyled" size={'sm'}>
               <Tbody>
@@ -232,12 +232,20 @@ export default function DetailBlock() {
                   </Td>
                   <Td>
                     {tx?.code == 0 ? (
-                      <Tag variant="subtle" colorScheme="green">
+                      <Tag
+                        bg="rgba(72, 187, 120, 0.15)"
+                        color="#48BB78"
+                        border="1px solid rgba(72, 187, 120, 0.3)"
+                      >
                         <TagLeftIcon as={FiCheck} />
                         <TagLabel>Success</TagLabel>
                       </Tag>
                     ) : (
-                      <Tag variant="subtle" colorScheme="red">
+                      <Tag
+                        bg="rgba(245, 101, 101, 0.15)"
+                        color="#F56565"
+                        border="1px solid rgba(245, 101, 101, 0.3)"
+                      >
                         <TagLeftIcon as={FiX} />
                         <TagLabel>Error</TagLabel>
                       </Tag>
@@ -255,11 +263,7 @@ export default function DetailBlock() {
                       style={{ textDecoration: 'none' }}
                       _focus={{ boxShadow: 'none' }}
                     >
-                      <Text
-                        color={useColorModeValue('light-theme', 'dark-theme')}
-                      >
-                        {tx?.height}
-                      </Text>
+                      <Text color="#b385f7">{tx?.height}</Text>
                     </Link>
                   </Td>
                 </Tr>
@@ -302,13 +306,25 @@ export default function DetailBlock() {
 
         <Box
           mt={8}
-          bg={useColorModeValue('light-container', 'dark-container')}
+          bg="rgba(12, 15, 25, 0.85)"
           backdropFilter="blur(10px)"
           border="1px solid"
-          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          borderColor="rgba(179, 133, 247, 0.12)"
           shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
           borderRadius="xl"
           p={4}
+          position="relative"
+          overflow="hidden"
+          _before={{
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '1px',
+            background:
+              'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.3), transparent)',
+          }}
         >
           <Heading size={'md'} mb={4}>
             Messages
@@ -319,22 +335,26 @@ export default function DetailBlock() {
               variant={'outline'}
               key={index}
               mb={8}
-              borderColor={useColorModeValue(
-                'whiteAlpha.200',
-                'whiteAlpha.200'
-              )}
+              borderColor="rgba(179, 133, 247, 0.12)"
               bg="rgba(10, 13, 22, 0.55)"
               shadow="0 8px 20px rgba(7, 10, 18, 0.45)"
+              position="relative"
+              overflow="hidden"
+              _before={{
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '1px',
+                background:
+                  'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.3), transparent)',
+              }}
             >
               <CardHeader>
                 <Heading size="sm">{getTypeMsg(msg.typeUrl)}</Heading>
               </CardHeader>
-              <Divider
-                borderColor={useColorModeValue(
-                  'whiteAlpha.200',
-                  'whiteAlpha.200'
-                )}
-              />
+              <Divider borderColor="rgba(179, 133, 247, 0.12)" />
               <CardBody>
                 <TableContainer>
                   <Table variant="unstyled" size={'sm'}>

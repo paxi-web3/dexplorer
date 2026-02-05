@@ -1,12 +1,4 @@
-import {
-  Divider,
-  HStack,
-  Heading,
-  Icon,
-  Link,
-  Text,
-  useColorModeValue,
-} from '@chakra-ui/react'
+import { Divider, HStack, Heading, Icon, Link, Text } from '@chakra-ui/react'
 import Head from 'next/head'
 import NextLink from 'next/link'
 import { FiChevronRight, FiHome } from 'react-icons/fi'
@@ -29,7 +21,7 @@ export default function Parameters() {
         <HStack h="24px">
           <Heading size={'md'}>Parameters</Heading>
           <Divider
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            borderColor="rgba(179, 133, 247, 0.12)"
             size="10px"
             orientation="vertical"
           />
@@ -41,14 +33,14 @@ export default function Parameters() {
             display="flex"
             justifyContent="center"
           >
-            <Icon
-              fontSize="16"
-              color={useColorModeValue('light-theme', 'dark-theme')}
-              as={FiHome}
-            />
+            <Icon fontSize="16" color="#b385f7" as={FiHome} />
           </Link>
-          <Icon fontSize="16" as={FiChevronRight} />
-          <Text>Parameters</Text>
+          <Icon
+            fontSize="16"
+            as={FiChevronRight}
+            color="rgba(255, 255, 255, 0.6)"
+          />
+          <Text color="rgba(255, 255, 255, 0.6)">Parameters</Text>
         </HStack>
         <MintParameters />
         <StakingParameters />

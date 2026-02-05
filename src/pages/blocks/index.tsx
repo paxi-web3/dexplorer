@@ -10,7 +10,6 @@ import {
   Icon,
   Link,
   Table,
-  useColorModeValue,
   TableContainer,
   Tbody,
   Td,
@@ -89,13 +88,25 @@ export default function Blocks() {
     } else if (messages.length == 1) {
       return (
         <HStack>
-          <Tag colorScheme="purple">{getTypeMsg(messages[0].typeUrl)}</Tag>
+          <Tag
+            bg="rgba(179, 133, 247, 0.15)"
+            color="#b385f7"
+            border="1px solid rgba(179, 133, 247, 0.3)"
+          >
+            {getTypeMsg(messages[0].typeUrl)}
+          </Tag>
         </HStack>
       )
     } else if (messages.length > 1) {
       return (
         <HStack>
-          <Tag colorScheme="purple">{getTypeMsg(messages[0].typeUrl)}</Tag>
+          <Tag
+            bg="rgba(179, 133, 247, 0.15)"
+            color="#b385f7"
+            border="1px solid rgba(179, 133, 247, 0.3)"
+          >
+            {getTypeMsg(messages[0].typeUrl)}
+          </Tag>
           <Text textColor="whiteAlpha.700">+{messages.length - 1}</Text>
         </HStack>
       )
@@ -114,7 +125,7 @@ export default function Blocks() {
         <HStack h="24px">
           <Heading size={'md'}>Blocks</Heading>
           <Divider
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            borderColor="rgba(179, 133, 247, 0.2)"
             size="10px"
             orientation="vertical"
           />
@@ -126,26 +137,34 @@ export default function Blocks() {
             display="flex"
             justifyContent="center"
           >
-            <Icon
-              fontSize="16"
-              color={useColorModeValue('light-theme', 'dark-theme')}
-              as={FiHome}
-            />
+            <Icon fontSize="16" color="#b385f7" as={FiHome} />
           </Link>
-          <Icon fontSize="16" as={FiChevronRight} />
-          <Text>Blocks</Text>
+          <Icon fontSize="16" color="whiteAlpha.400" as={FiChevronRight} />
+          <Text color="whiteAlpha.600">Blocks</Text>
         </HStack>
         <Box
           mt={8}
-          bg={useColorModeValue('light-container', 'dark-container')}
+          bg="rgba(12, 15, 25, 0.85)"
           backdropFilter="blur(10px)"
           border="1px solid"
-          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          borderColor="rgba(179, 133, 247, 0.12)"
           shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
           borderRadius="xl"
           p={4}
+          position="relative"
+          overflow="hidden"
+          _before={{
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '1px',
+            background:
+              'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.3), transparent)',
+          }}
         >
-          <Tabs variant="soft-rounded" colorScheme="purple">
+          <Tabs variant="pageTabs">
             <TabList>
               <Tab>Blocks</Tab>
               <Tab>Transactions</Tab>
@@ -153,21 +172,7 @@ export default function Blocks() {
             <TabPanels>
               <TabPanel>
                 <TableContainer>
-                  <Table
-                    variant="simple"
-                    sx={{
-                      'tbody tr': {
-                        boxShadow:
-                          'inset 0 -2px 0 0 var(--chakra-colors-gray-800)',
-                      },
-                      'tbody tr td': {
-                        borderBottom: 'none',
-                      },
-                      'tbody tr:last-of-type': {
-                        boxShadow: 'none',
-                      },
-                    }}
-                  >
+                  <Table variant="unstyled">
                     <Thead>
                       <Tr>
                         <Th>Height</Th>
@@ -186,14 +191,7 @@ export default function Blocks() {
                               style={{ textDecoration: 'none' }}
                               _focus={{ boxShadow: 'none' }}
                             >
-                              <Text
-                                color={useColorModeValue(
-                                  'light-theme',
-                                  'dark-theme'
-                                )}
-                              >
-                                {block.header.height}
-                              </Text>
+                              <Text color="#b385f7">{block.header.height}</Text>
                             </Link>
                           </Td>
                           <Td noOfLines={1}>{toHex(block.header.appHash)}</Td>
@@ -209,21 +207,7 @@ export default function Blocks() {
               </TabPanel>
               <TabPanel>
                 <TableContainer>
-                  <Table
-                    variant="simple"
-                    sx={{
-                      'tbody tr': {
-                        boxShadow:
-                          'inset 0 -2px 0 0 var(--chakra-colors-gray-800)',
-                      },
-                      'tbody tr td': {
-                        borderBottom: 'none',
-                      },
-                      'tbody tr:last-of-type': {
-                        boxShadow: 'none',
-                      },
-                    }}
-                  >
+                  <Table variant="unstyled">
                     <Thead>
                       <Tr>
                         <Th>Tx Hash</Th>
@@ -245,24 +229,27 @@ export default function Blocks() {
                               style={{ textDecoration: 'none' }}
                               _focus={{ boxShadow: 'none' }}
                             >
-                              <Text
-                                color={useColorModeValue(
-                                  'light-theme',
-                                  'dark-theme'
-                                )}
-                              >
+                              <Text color="#b385f7">
                                 {trimHash(tx.TxEvent.hash)}
                               </Text>
                             </Link>
                           </Td>
                           <Td>
                             {tx.TxEvent.result.code == 0 ? (
-                              <Tag variant="subtle" colorScheme="green">
+                              <Tag
+                                bg="rgba(16, 185, 129, 0.15)"
+                                color="#10b981"
+                                border="1px solid rgba(16, 185, 129, 0.3)"
+                              >
                                 <TagLeftIcon as={FiCheck} />
                                 <TagLabel>Success</TagLabel>
                               </Tag>
                             ) : (
-                              <Tag variant="subtle" colorScheme="red">
+                              <Tag
+                                bg="rgba(239, 68, 68, 0.15)"
+                                color="#ef4444"
+                                border="1px solid rgba(239, 68, 68, 0.3)"
+                              >
                                 <TagLeftIcon as={FiX} />
                                 <TagLabel>Error</TagLabel>
                               </Tag>

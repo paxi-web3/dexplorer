@@ -6,7 +6,6 @@ import {
   Heading,
   Icon,
   Link,
-  useColorModeValue,
   Text,
   Table,
   Thead,
@@ -17,14 +16,21 @@ import {
   TableContainer,
   Tag,
   Spinner,
-  Stat,
-  StatLabel,
-  StatNumber,
   SimpleGrid,
+  Flex,
+  VStack,
 } from '@chakra-ui/react'
 import { useEffect, useState, useCallback, useRef } from 'react'
 import NextLink from 'next/link'
-import { FiChevronRight, FiHome } from 'react-icons/fi'
+import {
+  FiChevronRight,
+  FiHome,
+  FiDollarSign,
+  FiLock,
+  FiUsers,
+  FiTrendingUp,
+} from 'react-icons/fi'
+import { IconType } from 'react-icons'
 
 interface Holder {
   address: string
@@ -38,6 +44,73 @@ interface PaxiStatus {
   total_staked: number
   total_accounts: number
 }
+
+const StatCard = ({
+  icon,
+  label,
+  value,
+  accentColor,
+}: {
+  icon: IconType
+  label: string
+  value: string
+  accentColor: string
+}) => (
+  <Box
+    position="relative"
+    overflow="hidden"
+    bg="rgba(12, 15, 25, 0.85)"
+    backdropFilter="blur(12px)"
+    border="1px solid"
+    borderColor="rgba(179, 133, 247, 0.12)"
+    borderRadius="14px"
+    p={5}
+    transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+    _hover={{
+      borderColor: 'rgba(179, 133, 247, 0.3)',
+      transform: 'translateY(-2px)',
+    }}
+    _before={{
+      content: '""',
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      height: '1px',
+      background: `linear-gradient(90deg, transparent, ${accentColor}40, transparent)`,
+    }}
+  >
+    <VStack align="flex-start" spacing={3}>
+      <Flex
+        align="center"
+        justify="center"
+        w="40px"
+        h="40px"
+        borderRadius="10px"
+        bg={`${accentColor}15`}
+        border="1px solid"
+        borderColor={`${accentColor}30`}
+      >
+        <Icon as={icon} fontSize="18px" color={accentColor} />
+      </Flex>
+      <Box>
+        <Text
+          fontSize="11px"
+          fontWeight="600"
+          color="whiteAlpha.500"
+          textTransform="uppercase"
+          letterSpacing="0.08em"
+          mb={1}
+        >
+          {label}
+        </Text>
+        <Heading size="md" fontWeight="700" color="whiteAlpha.900">
+          {value}
+        </Heading>
+      </Box>
+    </VStack>
+  </Box>
+)
 
 export default function Holders() {
   const [holders, setHolders] = useState<Holder[]>([])
@@ -118,7 +191,7 @@ export default function Holders() {
         <HStack h="24px">
           <Heading size={'md'}>Holders</Heading>
           <Divider
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            borderColor="rgba(179, 133, 247, 0.2)"
             size="10px"
             orientation="vertical"
           />
@@ -130,104 +203,70 @@ export default function Holders() {
             display="flex"
             justifyContent="center"
           >
-            <Icon
-              fontSize="16"
-              color={useColorModeValue('light-theme', 'dark-theme')}
-              as={FiHome}
-            />
+            <Icon fontSize="16" color="#b385f7" as={FiHome} />
           </Link>
-          <Icon fontSize="16" as={FiChevronRight} />
-          <Text>Holders</Text>
+          <Icon fontSize="16" as={FiChevronRight} color="whiteAlpha.400" />
+          <Text color="whiteAlpha.600">Holders</Text>
         </HStack>
 
         <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={4} mt={8}>
-          <Box
-            bg={useColorModeValue('light-container', 'dark-container')}
-            backdropFilter="blur(10px)"
-            border="1px solid"
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
-            shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
-            borderRadius="xl"
-            p={4}
-          >
-            <Stat>
-              <StatLabel>Total Supply</StatLabel>
-              <StatNumber>
-                {status
-                  ? formatNum(status.circulating_supply + status.locked_vesting)
-                  : '-'}
-              </StatNumber>
-            </Stat>
-          </Box>
-          <Box
-            bg={useColorModeValue('light-container', 'dark-container')}
-            backdropFilter="blur(10px)"
-            border="1px solid"
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
-            shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
-            borderRadius="xl"
-            p={4}
-          >
-            <Stat>
-              <StatLabel>Locked Vesting</StatLabel>
-              <StatNumber>
-                {status ? formatNum(status.locked_vesting) : '-'}
-              </StatNumber>
-            </Stat>
-          </Box>
-          <Box
-            bg={useColorModeValue('light-container', 'dark-container')}
-            backdropFilter="blur(10px)"
-            border="1px solid"
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
-            shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
-            borderRadius="xl"
-            p={4}
-          >
-            <Stat>
-              <StatLabel>Total Staked</StatLabel>
-              <StatNumber>
-                {status ? formatNum(status.total_staked) : '-'}
-              </StatNumber>
-            </Stat>
-          </Box>
-          <Box
-            bg={useColorModeValue('light-container', 'dark-container')}
-            backdropFilter="blur(10px)"
-            border="1px solid"
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
-            shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
-            borderRadius="xl"
-            p={4}
-          >
-            <Stat>
-              <StatLabel>Total Accounts</StatLabel>
-              <StatNumber>
-                {status ? status.total_accounts.toLocaleString() : '-'}
-              </StatNumber>
-            </Stat>
-          </Box>
+          <StatCard
+            icon={FiDollarSign}
+            label="Total Supply"
+            value={
+              status
+                ? formatNum(status.circulating_supply + status.locked_vesting)
+                : '-'
+            }
+            accentColor="#b385f7"
+          />
+          <StatCard
+            icon={FiLock}
+            label="Locked Vesting"
+            value={status ? formatNum(status.locked_vesting) : '-'}
+            accentColor="#a78bfa"
+          />
+          <StatCard
+            icon={FiTrendingUp}
+            label="Total Staked"
+            value={status ? formatNum(status.total_staked) : '-'}
+            accentColor="#38bdf8"
+          />
+          <StatCard
+            icon={FiUsers}
+            label="Total Accounts"
+            value={status ? status.total_accounts.toLocaleString() : '-'}
+            accentColor="#34d399"
+          />
         </SimpleGrid>
 
         <Box
           mt={8}
-          bg={useColorModeValue('light-container', 'dark-container')}
-          backdropFilter="blur(10px)"
+          position="relative"
+          overflow="hidden"
+          bg="rgba(12, 15, 25, 0.85)"
+          backdropFilter="blur(12px)"
           border="1px solid"
-          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
-          shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
-          borderRadius="xl"
-          p={4}
+          borderColor="rgba(179, 133, 247, 0.12)"
+          borderRadius="16px"
+          p={5}
+          _before={{
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '1px',
+            background:
+              'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.3), transparent)',
+          }}
         >
           <Heading size={'md'} mb={4}>
             Top Holders
           </Heading>
-          <Divider
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
-            mb={4}
-          />
+          <Divider borderColor="rgba(179, 133, 247, 0.12)" mb={4} />
           <TableContainer>
-            <Table variant="simple">
+            <Table variant="unstyled">
               <Thead>
                 <Tr>
                   <Th width="80px">Rank</Th>
@@ -237,13 +276,10 @@ export default function Holders() {
               </Thead>
               <Tbody>
                 {holders.map((holder, index) => (
-                  <Tr
-                    key={`${holder.address}-${index}`}
-                    borderBottom="2px solid"
-                    borderColor="gray.800"
-                    _last={{ borderBottom: 'none' }}
-                  >
-                    <Td>#{index + 1}</Td>
+                  <Tr key={`${holder.address}-${index}`}>
+                    <Td fontWeight="600" color="whiteAlpha.600">
+                      #{index + 1}
+                    </Td>
                     <Td>
                       <HStack spacing={2}>
                         <Link
@@ -253,23 +289,26 @@ export default function Holders() {
                           _focus={{ boxShadow: 'none' }}
                         >
                           <Text
-                            color={useColorModeValue(
-                              'light-theme',
-                              'dark-theme'
-                            )}
+                            color="#b385f7"
                             fontSize={{ base: 'xs', md: 'md' }}
                             isTruncated
                             maxW={{ base: '150px', md: '400px', lg: 'full' }}
+                            _hover={{ color: '#c79bff' }}
                           >
                             {holder.address}
                           </Text>
                         </Link>
-                        <Tag size="sm" colorScheme="purple">
+                        <Tag
+                          size="sm"
+                          bg="rgba(179, 133, 247, 0.15)"
+                          color="#b385f7"
+                          border="1px solid rgba(179, 133, 247, 0.3)"
+                        >
                           {holder.type.toUpperCase()}
                         </Tag>
                       </HStack>
                     </Td>
-                    <Td isNumeric>
+                    <Td isNumeric fontFamily="mono">
                       {holder.balance.toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -282,11 +321,11 @@ export default function Holders() {
           </TableContainer>
 
           <Box ref={loaderRef} textAlign="center" py={4}>
-            {isFetching && (
-              <Spinner color={useColorModeValue('light-theme', 'dark-theme')} />
-            )}
+            {isFetching && <Spinner color="#b385f7" />}
             {!hasMore && holders.length > 0 && (
-              <Text color="whiteAlpha.600">No more holders to load</Text>
+              <Text color="whiteAlpha.500" fontSize="sm">
+                No more holders to load
+              </Text>
             )}
           </Box>
         </Box>

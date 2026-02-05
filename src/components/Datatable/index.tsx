@@ -18,7 +18,6 @@ import {
   Select,
   Text,
   SkeletonText,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import {
   ArrowLeftIcon,
@@ -170,7 +169,8 @@ export default function DataTable<Data extends object>({
               mr={4}
               aria-label="First Page"
               variant="ghost"
-              color={useColorModeValue('light-theme', 'dark-theme')}
+              color="#b385f7"
+              _hover={{ bg: 'rgba(179, 133, 247, 0.15)' }}
             />
           </Tooltip>
           <Tooltip label="Previous Page">
@@ -180,7 +180,8 @@ export default function DataTable<Data extends object>({
               icon={<ChevronLeftIcon h={6} w={6} />}
               aria-label="Previous Page"
               variant="ghost"
-              color={useColorModeValue('light-theme', 'dark-theme')}
+              color="#b385f7"
+              _hover={{ bg: 'rgba(179, 133, 247, 0.15)' }}
             />
           </Tooltip>
         </Flex>
@@ -211,10 +212,8 @@ export default function DataTable<Data extends object>({
           >
             <NumberInputField
               bg="rgba(10, 13, 22, 0.5)"
-              borderColor={useColorModeValue(
-                'whiteAlpha.200',
-                'whiteAlpha.200'
-              )}
+              borderColor="rgba(179, 133, 247, 0.12)"
+              _focus={{ borderColor: '#b385f7' }}
             />
             <NumberInputStepper>
               <NumberIncrementStepper />
@@ -228,7 +227,8 @@ export default function DataTable<Data extends object>({
               table.setPageSize(Number(e.target.value))
             }}
             bg="rgba(10, 13, 22, 0.5)"
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            borderColor="rgba(179, 133, 247, 0.12)"
+            _focus={{ borderColor: '#b385f7' }}
           >
             {[10, 20, 30, 40, 50].map((pageSize) => (
               <option key={pageSize} value={pageSize}>
@@ -246,7 +246,8 @@ export default function DataTable<Data extends object>({
               icon={<ChevronRightIcon h={6} w={6} />}
               aria-label="Next Page"
               variant="ghost"
-              color={useColorModeValue('light-theme', 'dark-theme')}
+              color="#b385f7"
+              _hover={{ bg: 'rgba(179, 133, 247, 0.15)' }}
             />
           </Tooltip>
           <Tooltip label="Last Page">
@@ -257,7 +258,8 @@ export default function DataTable<Data extends object>({
               ml={4}
               aria-label="Last Page"
               variant="ghost"
-              color={useColorModeValue('light-theme', 'dark-theme')}
+              color="#b385f7"
+              _hover={{ bg: 'rgba(179, 133, 247, 0.15)' }}
             />
           </Tooltip>
         </Flex>

@@ -13,7 +13,6 @@ import {
   BoxProps,
   FlexProps,
   Button,
-  Heading,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -150,32 +149,30 @@ export default function Sidebar({ children }: { children: ReactNode }) {
         onOverlayClick={onClose}
         size="full"
       >
-        <DrawerContent>
+        <DrawerContent bg="rgba(12, 15, 25, 0.98)" backdropFilter="blur(20px)">
           <SidebarContent onClose={onClose} />
         </DrawerContent>
       </Drawer>
 
       <Modal isOpen={isSearchOpen} onClose={onCloseSearch}>
-        <ModalOverlay />
+        <ModalOverlay bg="rgba(5, 8, 16, 0.85)" backdropFilter="blur(8px)" />
         <ModalContent
-          bg={useColorModeValue('light-container', 'dark-container')}
+          bg="rgba(12, 15, 25, 0.95)"
+          border="1px solid"
+          borderColor="rgba(179, 133, 247, 0.15)"
+          boxShadow="0 4px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(179, 133, 247, 0.15)"
         >
-          <ModalHeader>Search</ModalHeader>
+          <ModalHeader fontWeight="600">Search</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Input
-              width={400}
+              width="100%"
               type={'text'}
-              borderColor={useColorModeValue(
-                'whiteAlpha.200',
-                'whiteAlpha.200'
-              )}
+              borderColor="rgba(179, 133, 247, 0.2)"
               _focus={{
-                borderColor: useColorModeValue('light-theme', 'dark-theme'),
-                boxShadow: `0 0 0 1px ${useColorModeValue(
-                  'colors.light-theme',
-                  'colors.dark-theme'
-                )}`,
+                borderColor: 'light-theme',
+                boxShadow:
+                  '0 0 0 1px rgba(179, 133, 247, 0.3), 0 0 16px rgba(179, 133, 247, 0.15)',
               }}
               placeholder="Height/Tx/Account/PRC-20"
               onChange={handleInputSearch}
@@ -183,16 +180,7 @@ export default function Sidebar({ children }: { children: ReactNode }) {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              bg={useColorModeValue('light-theme', 'dark-theme')}
-              _hover={{
-                bg: useColorModeValue('purple.500', 'purple.500'),
-              }}
-              color="white"
-              w="full"
-              textTransform="uppercase"
-              onClick={handleSearch}
-            >
+            <Button w="full" onClick={handleSearch}>
               Confirm
             </Button>
           </ModalFooter>
@@ -230,30 +218,58 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
 
   return (
     <Box
-      bg={useColorModeValue('light-container', 'dark-container')}
+      bg="rgba(12, 15, 25, 0.9)"
+      backdropFilter="blur(20px)"
       borderRight="1px"
-      borderRightColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+      borderRightColor="rgba(179, 133, 247, 0.1)"
       w={{ base: 'full', md: 60 }}
       pos="fixed"
       h="full"
       {...rest}
     >
+      {/* Gradient accent line */}
+      <Box
+        position="absolute"
+        top={0}
+        right={0}
+        bottom={0}
+        width="1px"
+        background="linear-gradient(180deg, rgba(179, 133, 247, 0.3) 0%, rgba(179, 133, 247, 0.05) 50%, rgba(179, 133, 247, 0.3) 100%)"
+      />
+
       <Flex flexDirection="column" h="full" justifyContent="space-between">
         <Box>
           <Flex
             h="20"
             alignItems="center"
-            mx="8"
+            mx="6"
             justifyContent="space-between"
           >
             <Flex align="center" gap="3">
-              <Box
-                as="img"
-                src="/icon_transparent.png"
-                alt="Paxi Explorer logo"
-                boxSize="28px"
-              />
-              <Text fontSize="20px" fontWeight="bold">
+              <Box position="relative" boxSize="32px">
+                <Box
+                  as="img"
+                  src="/icon_transparent.png"
+                  alt="Paxi Explorer logo"
+                  boxSize="32px"
+                  position="relative"
+                  zIndex={1}
+                />
+                <Box
+                  position="absolute"
+                  inset="-4px"
+                  background="radial-gradient(circle, rgba(179, 133, 247, 0.3) 0%, transparent 70%)"
+                  borderRadius="full"
+                  filter="blur(8px)"
+                />
+              </Box>
+              <Text
+                fontSize="18px"
+                fontWeight="700"
+                letterSpacing="-0.01em"
+                bgGradient="linear(to-r, white, whiteAlpha.800)"
+                bgClip="text"
+              >
                 Paxi Explorer
               </Text>
             </Flex>
@@ -262,47 +278,61 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
               onClick={onClose}
             />
           </Flex>
-          {LinkItems.map((link) => (
-            <NavItem
-              key={link.name}
-              icon={link.icon}
-              route={link.route}
-              onClick={onClose}
+
+          <Box px={3} mt={2}>
+            {LinkItems.map((link) => (
+              <NavItem
+                key={link.name}
+                icon={link.icon}
+                route={link.route}
+                onClick={onClose}
+              >
+                {link.name}
+              </NavItem>
+            ))}
+          </Box>
+
+          <Box px={3} mt={6}>
+            <Text
+              px={4}
+              mb={2}
+              fontSize="10px"
+              fontWeight="600"
+              textTransform="uppercase"
+              letterSpacing="0.1em"
+              color="whiteAlpha.400"
             >
-              {link.name}
-            </NavItem>
-          ))}
-          <Heading
-            mt="6"
-            p="4"
-            mx="4"
-            size={'xs'}
-            textTransform="uppercase"
-            textColor="whiteAlpha.500"
-            fontWeight="medium"
-          >
-            Links
-          </Heading>
-          {RefLinkItems.map((link) => (
-            <NavItem
-              key={link.name}
-              icon={link.icon}
-              route={link.route}
-              isBlank={link.isBlank}
-              onClick={onClose}
-            >
-              {link.name}
-            </NavItem>
-          ))}
+              External Links
+            </Text>
+            {RefLinkItems.map((link) => (
+              <NavItem
+                key={link.name}
+                icon={link.icon}
+                route={link.route}
+                isBlank={link.isBlank}
+                onClick={onClose}
+              >
+                {link.name}
+              </NavItem>
+            ))}
+          </Box>
         </Box>
-        <Flex justifyContent="center" mb="4">
+
+        <Flex justifyContent="center" mb="6" px={4}>
           <Button
             leftIcon={<FiLogOut />}
-            colorScheme="red"
             variant="outline"
+            size="sm"
+            w="full"
+            borderColor="rgba(239, 68, 68, 0.4)"
+            color="#ef4444"
+            _hover={{
+              bg: 'rgba(239, 68, 68, 0.1)',
+              borderColor: 'rgba(239, 68, 68, 0.6)',
+            }}
             onClick={handleDisconnect}
           >
-            Disconnect All
+            Disconnect
           </Button>
         </Flex>
       </Flex>
@@ -327,11 +357,6 @@ const NavItem = ({
 }: NavItemProps) => {
   const router = useRouter()
   const [isSelected, setIsSelected] = useState(false)
-  const selectedColor = useColorModeValue('light-theme', 'dark-theme')
-  const hoverBg = useColorModeValue(
-    'rgba(179, 133, 247, 0.08)',
-    'rgba(179, 133, 247, 0.08)'
-  )
 
   useEffect(() => {
     if (route === '/') {
@@ -352,31 +377,48 @@ const NavItem = ({
     >
       <Flex
         align="center"
-        p="4"
-        mx="4"
-        borderRadius="lg"
+        px="4"
+        py="2.5"
+        my="1"
+        borderRadius="10px"
         role="group"
         cursor="pointer"
-        bg={
-          isSelected
-            ? useColorModeValue(
-                'rgba(179, 133, 247, 0.16)',
-                'rgba(179, 133, 247, 0.16)'
-              )
-            : 'transparent'
-        }
-        color={isSelected ? selectedColor : 'inherit'}
+        position="relative"
+        overflow="hidden"
+        transition="all 0.2s ease"
+        bg={isSelected ? 'rgba(179, 133, 247, 0.12)' : 'transparent'}
+        color={isSelected ? '#b385f7' : 'whiteAlpha.700'}
+        fontWeight={isSelected ? '600' : '500'}
+        fontSize="14px"
         _hover={{
-          bg: hoverBg,
+          bg: 'rgba(179, 133, 247, 0.08)',
+          color: '#b385f7',
         }}
+        _before={
+          isSelected
+            ? {
+                content: '""',
+                position: 'absolute',
+                left: 0,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '3px',
+                height: '60%',
+                borderRadius: '0 4px 4px 0',
+                background: 'linear-gradient(180deg, #b385f7, #9333ea)',
+                boxShadow: '0 0 8px rgba(179, 133, 247, 0.5)',
+              }
+            : {}
+        }
         {...rest}
       >
         {icon && (
           <Icon
-            mr="4"
+            mr="3"
             fontSize="16"
+            transition="all 0.2s ease"
             _groupHover={{
-              color: selectedColor,
+              color: '#b385f7',
             }}
             as={icon}
           />
@@ -396,12 +438,24 @@ const MobileNav = ({ onOpen, onOpenSearch, ...rest }: MobileProps) => {
     <Flex
       ml={{ base: 0, md: 60 }}
       px={{ base: 4, md: 24 }}
-      height="20"
+      height="16"
       alignItems="center"
-      bg={useColorModeValue('light-container', 'dark-container')}
+      bg="rgba(12, 15, 25, 0.9)"
+      backdropFilter="blur(20px)"
       borderBottomWidth="1px"
-      borderBottomColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+      borderBottomColor="rgba(179, 133, 247, 0.1)"
       justifyContent="space-between"
+      position="relative"
+      _after={{
+        content: '""',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: '1px',
+        background:
+          'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.3), transparent)',
+      }}
       {...rest}
     >
       <Flex align="center">
@@ -410,16 +464,23 @@ const MobileNav = ({ onOpen, onOpenSearch, ...rest }: MobileProps) => {
           onClick={onOpen}
           aria-label="open menu"
           icon={<FiMenu />}
+          color="whiteAlpha.800"
+          _hover={{
+            bg: 'rgba(179, 133, 247, 0.1)',
+            color: '#b385f7',
+          }}
         />
 
-        <Flex align="center" ml="6" gap="3">
-          <Box
-            as="img"
-            src="/icon_transparent.png"
-            alt="Paxi Explorer logo"
-            boxSize="28px"
-          />
-          <Text fontSize="2xl" fontWeight="bold">
+        <Flex align="center" ml="4" gap="3">
+          <Box position="relative" boxSize="28px">
+            <Box
+              as="img"
+              src="/icon_transparent.png"
+              alt="Paxi Explorer logo"
+              boxSize="28px"
+            />
+          </Box>
+          <Text fontSize="lg" fontWeight="700" letterSpacing="-0.01em">
             Paxi Explorer
           </Text>
         </Flex>
@@ -433,6 +494,11 @@ const MobileNav = ({ onOpen, onOpenSearch, ...rest }: MobileProps) => {
           fontSize="20"
           icon={<FiSearch />}
           onClick={onOpenSearch}
+          color="whiteAlpha.800"
+          _hover={{
+            bg: 'rgba(179, 133, 247, 0.1)',
+            color: '#b385f7',
+          }}
         />
       </Flex>
     </Flex>

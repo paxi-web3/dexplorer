@@ -6,7 +6,6 @@ import {
   Heading,
   Icon,
   Link,
-  useColorModeValue,
   Text,
   useToast,
 } from '@chakra-ui/react'
@@ -116,7 +115,7 @@ export default function Validators() {
         <HStack h="24px">
           <Heading size={'md'}>Validators</Heading>
           <Divider
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            borderColor="rgba(179, 133, 247, 0.2)"
             size="10px"
             orientation="vertical"
           />
@@ -128,25 +127,33 @@ export default function Validators() {
             display="flex"
             justifyContent="center"
           >
-            <Icon
-              fontSize="16"
-              color={useColorModeValue('light-theme', 'dark-theme')}
-              as={FiHome}
-            />
+            <Icon fontSize="16" color="#b385f7" as={FiHome} />
           </Link>
-          <Icon fontSize="16" as={FiChevronRight} />
-          <Text>Validators</Text>
+          <Icon fontSize="16" as={FiChevronRight} color="whiteAlpha.400" />
+          <Text color="whiteAlpha.600">Validators</Text>
         </HStack>
         <Box
           mt={8}
-          bg={useColorModeValue('light-container', 'dark-container')}
+          bg="rgba(12, 15, 25, 0.85)"
           backdropFilter="blur(10px)"
           border="1px solid"
-          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          borderColor="rgba(179, 133, 247, 0.12)"
           shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
           borderRadius="xl"
           p={4}
           overflowX="auto"
+          position="relative"
+          overflow="hidden"
+          _before={{
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '1px',
+            background:
+              'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.3), transparent)',
+          }}
         >
           <DataTable
             columns={columns}

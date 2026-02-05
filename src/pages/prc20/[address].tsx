@@ -22,7 +22,6 @@ import {
   SimpleGrid,
   Spinner,
   Tag,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { useRouter } from 'next/router'
@@ -197,11 +196,21 @@ export default function PRC20Detail() {
     return () => observer.disconnect()
   }, [address, hasMoreHolders, holders.length, isFetchingHolders])
 
-  const themeColor = useColorModeValue('light-theme', 'dark-theme')
-  const panelBg = useColorModeValue('light-container', 'dark-container')
-  const borderColor = useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')
-  const mutedText = useColorModeValue('whiteAlpha.600', 'whiteAlpha.600')
+  const themeColor = '#b385f7'
+  const panelBg = 'rgba(12, 15, 25, 0.85)'
+  const borderColor = 'rgba(179, 133, 247, 0.12)'
+  const mutedText = 'whiteAlpha.600'
   const panelShadow = '0 12px 30px rgba(7, 10, 18, 0.55)'
+  const panelBeforeStyle = {
+    content: '""',
+    position: 'absolute' as const,
+    top: 0,
+    left: 0,
+    right: 0,
+    height: '1px',
+    background:
+      'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.4), transparent)',
+  }
 
   if (isLoading) {
     return (
@@ -239,7 +248,7 @@ export default function PRC20Detail() {
         <HStack h="24px">
           <Heading size={'md'}>PRC-20 Token</Heading>
           <Divider
-            borderColor={borderColor}
+            borderColor="rgba(179, 133, 247, 0.2)"
             size="10px"
             orientation="vertical"
           />
@@ -253,7 +262,7 @@ export default function PRC20Detail() {
           >
             <Icon fontSize="16" color={themeColor} as={FiHome} />
           </Link>
-          <Icon fontSize="16" as={FiChevronRight} />
+          <Icon fontSize="16" as={FiChevronRight} color="whiteAlpha.400" />
           <Link
             as={NextLink}
             href={'/prc20'}
@@ -262,8 +271,8 @@ export default function PRC20Detail() {
           >
             <Text color={themeColor}>PRC-20</Text>
           </Link>
-          <Icon fontSize="16" as={FiChevronRight} />
-          <Text>Detail</Text>
+          <Icon fontSize="16" as={FiChevronRight} color="whiteAlpha.400" />
+          <Text color="whiteAlpha.600">Detail</Text>
         </HStack>
 
         <Box
@@ -275,6 +284,9 @@ export default function PRC20Detail() {
           shadow={panelShadow}
           borderRadius="xl"
           p={4}
+          position="relative"
+          overflow="hidden"
+          _before={panelBeforeStyle}
         >
           <HStack spacing={4} mb={4}>
             <Image
@@ -293,11 +305,21 @@ export default function PRC20Detail() {
                 {contract.is_pump && <Badge colorScheme="purple">PUMP</Badge>}
               </HStack>
               <HStack spacing={2} mt={1}>
-                <Tag size="md" colorScheme="purple">
+                <Tag
+                  size="md"
+                  bg="rgba(179, 133, 247, 0.14)"
+                  color="#b385f7"
+                  border="1px solid rgba(179, 133, 247, 0.4)"
+                >
                   {contract.symbol}
                 </Tag>
                 {contract.minting_disabled && (
-                  <Tag size="sm" colorScheme="gray">
+                  <Tag
+                    size="sm"
+                    bg="rgba(128, 128, 128, 0.14)"
+                    color="whiteAlpha.700"
+                    border="1px solid rgba(128, 128, 128, 0.4)"
+                  >
                     Minting Disabled
                   </Tag>
                 )}
@@ -377,6 +399,9 @@ export default function PRC20Detail() {
           shadow={panelShadow}
           borderRadius="xl"
           p={4}
+          position="relative"
+          overflow="hidden"
+          _before={panelBeforeStyle}
         >
           <Heading size={'md'} mb={4}>
             Contract Details
@@ -478,13 +503,16 @@ export default function PRC20Detail() {
           shadow={panelShadow}
           borderRadius="xl"
           p={4}
+          position="relative"
+          overflow="hidden"
+          _before={panelBeforeStyle}
         >
           <Heading size={'md'} mb={4}>
             Holders
           </Heading>
           <Divider borderColor={borderColor} mb={4} />
           <TableContainer>
-            <Table variant="simple" size="sm">
+            <Table variant="unstyled" size="sm">
               <Thead>
                 <Tr>
                   <Th>Rank</Th>
@@ -511,7 +539,12 @@ export default function PRC20Detail() {
                         </Link>
                         {holder.address ===
                           'paxi1mfru9azs5nua2wxcd4sq64g5nt7nn4n80r745t' && (
-                          <Badge colorScheme="purple" fontSize="xs">
+                          <Badge
+                            bg="rgba(179, 133, 247, 0.14)"
+                            color="#b385f7"
+                            border="1px solid rgba(179, 133, 247, 0.4)"
+                            fontSize="xs"
+                          >
                             POOL
                           </Badge>
                         )}

@@ -22,7 +22,6 @@ import {
   InputGroup,
   InputLeftElement,
   IconButton,
-  useColorModeValue,
 } from '@chakra-ui/react'
 import { useEffect, useState, useCallback, useRef } from 'react'
 import NextLink from 'next/link'
@@ -203,7 +202,7 @@ export default function PRC20() {
         <HStack h="24px">
           <Heading size={'md'}>PRC-20 Assets</Heading>
           <Divider
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+            borderColor="rgba(179, 133, 247, 0.2)"
             size="10px"
             orientation="vertical"
           />
@@ -215,25 +214,33 @@ export default function PRC20() {
             display="flex"
             justifyContent="center"
           >
-            <Icon
-              fontSize="16"
-              color={useColorModeValue('light-theme', 'dark-theme')}
-              as={FiHome}
-            />
+            <Icon fontSize="16" color="#b385f7" as={FiHome} />
           </Link>
-          <Icon fontSize="16" as={FiChevronRight} />
-          <Text>PRC-20</Text>
+          <Icon fontSize="16" as={FiChevronRight} color="whiteAlpha.400" />
+          <Text color="whiteAlpha.600">PRC-20</Text>
         </HStack>
 
         <Box
           mt={8}
-          bg={useColorModeValue('light-container', 'dark-container')}
+          bg="rgba(12, 15, 25, 0.85)"
           backdropFilter="blur(10px)"
           border="1px solid"
-          borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
+          borderColor="rgba(179, 133, 247, 0.12)"
           shadow={'0 12px 30px rgba(7, 10, 18, 0.55)'}
           borderRadius="xl"
           p={4}
+          position="relative"
+          overflow="hidden"
+          _before={{
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '1px',
+            background:
+              'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.4), transparent)',
+          }}
         >
           <HStack justifyContent="space-between" mb={4} flexWrap="wrap" gap={2}>
             <Heading size={'md'}>Token List</Heading>
@@ -246,10 +253,7 @@ export default function PRC20() {
                   placeholder="Search by name or address"
                   value={searchQuery}
                   onChange={handleSearchChange}
-                  borderColor={useColorModeValue(
-                    'whiteAlpha.200',
-                    'whiteAlpha.200'
-                  )}
+                  borderColor="rgba(179, 133, 247, 0.12)"
                   color="whiteAlpha.900"
                   bg="rgba(10, 13, 22, 0.5)"
                 />
@@ -267,7 +271,7 @@ export default function PRC20() {
               </InputGroup>
               <Box
                 bg="rgba(179, 133, 247, 0.14)"
-                color={useColorModeValue('light-theme', 'dark-theme')}
+                color="#b385f7"
                 border="1px solid"
                 borderColor="rgba(179, 133, 247, 0.4)"
                 px={3}
@@ -281,16 +285,10 @@ export default function PRC20() {
               </Box>
             </HStack>
           </HStack>
-          <Divider
-            borderColor={useColorModeValue('whiteAlpha.200', 'whiteAlpha.200')}
-            mb={4}
-          />
+          <Divider borderColor="rgba(179, 133, 247, 0.12)" mb={4} />
           {isSearching && (
             <Box textAlign="center" py={4}>
-              <Spinner
-                color={useColorModeValue('light-theme', 'dark-theme')}
-                size="sm"
-              />
+              <Spinner color="#b385f7" size="sm" />
               <Text
                 fontSize="sm"
                 color="whiteAlpha.600"
@@ -302,7 +300,7 @@ export default function PRC20() {
             </Box>
           )}
           <TableContainer>
-            <Table variant="simple" size="sm">
+            <Table variant="unstyled" size="sm">
               <Thead>
                 <Tr>
                   <Th>Token</Th>
@@ -356,10 +354,7 @@ export default function PRC20() {
                               isTruncated
                               maxW="180px"
                               _hover={{
-                                color: useColorModeValue(
-                                  'light-theme',
-                                  'dark-theme'
-                                ),
+                                color: '#b385f7',
                               }}
                             >
                               {contract.contract_address}
@@ -371,9 +366,9 @@ export default function PRC20() {
                     <Td>
                       <Tag
                         size="sm"
-                        bg="rgba(179, 133, 247, 0.18)"
-                        color="whiteAlpha.900"
-                        border="1px solid rgba(179, 133, 247, 0.45)"
+                        bg="rgba(179, 133, 247, 0.14)"
+                        color="#b385f7"
+                        border="1px solid rgba(179, 133, 247, 0.4)"
                       >
                         {contract.symbol}
                       </Tag>
@@ -420,11 +415,7 @@ export default function PRC20() {
             </Box>
           ) : (
             <Box ref={loaderRef} textAlign="center" py={4}>
-              {isFetching && (
-                <Spinner
-                  color={useColorModeValue('light-theme', 'dark-theme')}
-                />
-              )}
+              {isFetching && <Spinner color="#b385f7" />}
               {!hasMore && contracts.length > 0 && (
                 <Text color="whiteAlpha.600">No more tokens to load</Text>
               )}

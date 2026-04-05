@@ -23,12 +23,14 @@ import { FiChevronRight, FiHome, FiCheck, FiX } from 'react-icons/fi'
 import NextLink from 'next/link'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectTmClient } from '@/store/connectSlice'
 import { getTx, getBlock } from '@/rpc/query'
 import { IndexedTx, Block, Coin } from '@cosmjs/stargate'
 import { Tx } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
+import { toHex } from '@cosmjs/encoding'
+import Long from 'long'
 import {
   timeFromNow,
   displayDate,
@@ -37,6 +39,11 @@ import {
 } from '@/utils/helper'
 import { decodeMsg, DecodeMsg } from '@/encoding'
 import CodeBlock from '@/components/CodeBlock'
+
+type FlattenedMsgField = {
+  key: string
+  value: unknown
+}
 
 export default function DetailBlock() {
   const router = useRouter()
@@ -79,10 +86,11 @@ export default function DetailBlock() {
 
   useEffect(() => {
     if (txData?.body?.messages.length && !msgs.length) {
-      for (const message of txData?.body?.messages) {
-        const msg = decodeMsg(message.typeUrl, message.value)
-        setMsgs((prevMsgs) => [...prevMsgs, msg])
-      }
+      setMsgs(
+        txData.body.messages.map((message) =>
+          decodeMsg(message.typeUrl, message.value)
+        )
+      )
     }
   }, [txData])
 
@@ -98,34 +106,96 @@ export default function DetailBlock() {
     return ''
   }
 
-  const showMsgData = (msgData: any) => {
-    if (msgData) {
-      if (Array.isArray(msgData)) {
-        const data = JSON.stringify(msgData, null, 2)
-        return (
-          <CodeBlock language="json" codeString={data} highContrast></CodeBlock>
-        )
-      }
-
-      if (!Array.isArray(msgData) && msgData.length) {
-        if (isBech32Address(msgData)) {
-          return (
-            <Link
-              as={NextLink}
-              href={'/accounts/' + msgData}
-              style={{ textDecoration: 'none' }}
-              _focus={{ boxShadow: 'none' }}
-            >
-              <Text color="#b385f7">{msgData}</Text>
-            </Link>
-          )
-        } else {
-          return String(msgData)
-        }
-      }
+  const normalizeMsgValue = (value: unknown): unknown => {
+    if (Long.isLong(value)) {
+      return value.toString()
     }
 
-    return ''
+    if (value instanceof Uint8Array) {
+      return toHex(value)
+    }
+
+    return value
+  }
+
+  const isRenderableObject = (
+    value: unknown
+  ): value is Record<string, unknown> => {
+    const normalized = normalizeMsgValue(value)
+    return (
+      typeof normalized === 'object' &&
+      normalized !== null &&
+      !Array.isArray(normalized)
+    )
+  }
+
+  const flattenMsgData = (value: unknown, prefix = ''): FlattenedMsgField[] => {
+    const normalized = normalizeMsgValue(value)
+
+    if (normalized === undefined || normalized === null) {
+      return prefix ? [{ key: prefix, value: '' }] : []
+    }
+
+    if (Array.isArray(normalized)) {
+      if (!normalized.length) {
+        return prefix ? [{ key: prefix, value: '[]' }] : []
+      }
+
+      return normalized.flatMap((item, index) =>
+        flattenMsgData(item, `${prefix}[${index}]`)
+      )
+    }
+
+    if (isRenderableObject(normalized)) {
+      const entries = Object.entries(normalized)
+
+      if (!entries.length) {
+        return prefix ? [{ key: prefix, value: '{}' }] : []
+      }
+
+      return entries.flatMap(([key, nestedValue]) =>
+        flattenMsgData(nestedValue, prefix ? `${prefix}.${key}` : key)
+      )
+    }
+
+    return prefix ? [{ key: prefix, value: normalized }] : []
+  }
+
+  const showMsgData = (msgData: unknown): ReactNode => {
+    const normalized = normalizeMsgValue(msgData)
+
+    if (Array.isArray(normalized)) {
+      const data = JSON.stringify(normalized, null, 2)
+      return <CodeBlock language="json" codeString={data} highContrast />
+    }
+
+    if (typeof normalized === 'string' && isBech32Address(normalized)) {
+      return (
+        <Link
+          as={NextLink}
+          href={'/accounts/' + normalized}
+          style={{ textDecoration: 'none' }}
+          _focus={{ boxShadow: 'none' }}
+        >
+          <Text color="#b385f7">{normalized}</Text>
+        </Link>
+      )
+    }
+
+    if (normalized === '') {
+      return <Text color="whiteAlpha.500">-</Text>
+    }
+
+    if (normalized === undefined || normalized === null) {
+      return <Text color="whiteAlpha.500">-</Text>
+    }
+
+    if (typeof normalized === 'object') {
+      const data = JSON.stringify(normalized, null, 2)
+      return <CodeBlock language="json" codeString={data} highContrast />
+    }
+
+    return String(normalized)
   }
 
   const showError = (err: Error) => {
@@ -332,62 +402,75 @@ export default function DetailBlock() {
             Messages
           </Heading>
 
-          {msgs.map((msg, index) => (
-            <Card
-              variant={'outline'}
-              key={index}
-              mb={8}
-              borderColor="rgba(179, 133, 247, 0.12)"
-              bg="rgba(10, 13, 22, 0.55)"
-              shadow="0 8px 20px rgba(7, 10, 18, 0.45)"
-              color="whiteAlpha.900"
-              position="relative"
-              overflow="hidden"
-              _before={{
-                content: '""',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                height: '1px',
-                background:
-                  'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.3), transparent)',
-              }}
-            >
-              <CardHeader>
-                <Heading size="sm" color="white">
-                  {getTypeMsg(msg.typeUrl)}
-                </Heading>
-              </CardHeader>
-              <Divider borderColor="rgba(179, 133, 247, 0.12)" />
-              <CardBody>
-                <TableContainer>
-                  <Table variant="unstyled" size={'sm'}>
-                    <Tbody>
-                      <Tr>
-                        <Td pl={0} width={150}>
-                          <b>typeUrl</b>
-                        </Td>
-                        <Td color="whiteAlpha.900">{msg.typeUrl}</Td>
-                      </Tr>
-                      {Object.keys(msg.data ?? {}).map((key) => (
-                        <Tr key={key}>
+          {msgs.map((msg, index) => {
+            const flattenedFields = flattenMsgData(msg.data)
+
+            return (
+              <Card
+                variant={'outline'}
+                key={index}
+                mb={8}
+                borderColor="rgba(179, 133, 247, 0.12)"
+                bg="rgba(10, 13, 22, 0.55)"
+                shadow="0 8px 20px rgba(7, 10, 18, 0.45)"
+                color="whiteAlpha.900"
+                position="relative"
+                overflow="hidden"
+                _before={{
+                  content: '""',
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  height: '1px',
+                  background:
+                    'linear-gradient(90deg, transparent, rgba(179, 133, 247, 0.3), transparent)',
+                }}
+              >
+                <CardHeader>
+                  <Heading size="sm" color="white">
+                    {getTypeMsg(msg.typeUrl)}
+                  </Heading>
+                </CardHeader>
+                <Divider borderColor="rgba(179, 133, 247, 0.12)" />
+                <CardBody>
+                  <TableContainer>
+                    <Table variant="unstyled" size={'sm'}>
+                      <Tbody>
+                        <Tr>
                           <Td pl={0} width={150}>
-                            <b>{key}</b>
+                            <b>typeUrl</b>
                           </Td>
-                          <Td>
-                            {showMsgData(
-                              msg.data ? msg.data[key as keyof {}] : ''
-                            )}
-                          </Td>
+                          <Td color="whiteAlpha.900">{msg.typeUrl}</Td>
                         </Tr>
-                      ))}
-                    </Tbody>
-                  </Table>
-                </TableContainer>
-              </CardBody>
-            </Card>
-          ))}
+                        {flattenedFields.length ? (
+                          flattenedFields.map((field) => (
+                            <Tr key={field.key}>
+                              <Td pl={0} width={150}>
+                                <b>{field.key}</b>
+                              </Td>
+                              <Td>{showMsgData(field.value)}</Td>
+                            </Tr>
+                          ))
+                        ) : (
+                          <Tr>
+                            <Td pl={0} width={150}>
+                              <b>params</b>
+                            </Td>
+                            <Td>
+                              <Text color="whiteAlpha.500">
+                                No decoded params
+                              </Text>
+                            </Td>
+                          </Tr>
+                        )}
+                      </Tbody>
+                    </Table>
+                  </TableContainer>
+                </CardBody>
+              </Card>
+            )
+          })}
         </Box>
       </main>
     </>
